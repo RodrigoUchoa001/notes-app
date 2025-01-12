@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/ui/widgets/note_card.dart';
+import 'package:notes_app/ui/widgets/notes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 20),
-        child: NoteCard(),
+        child: Notes(),
       ),
       floatingActionButton: Material(
         color: Colors
