@@ -6,15 +6,39 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Exemplo de dados para simular itens dinâmicos
-    final items = List.generate(10, (index) {
-      return {
-        'title': 'Item ${index + 1}',
-        'description': 'Descrição para o item ${index + 1}',
-        'color': Colors.primaries[index % Colors.primaries.length],
-        'height': 100.0 + (index % 4) * 30.0, // Altura variável
-      };
-    });
+    final items = [
+      {
+        'title': 'How to make your personal brand stand out online',
+        'date': 'May 21, 2020',
+        'color': Colors.redAccent.shade100,
+      },
+      {
+        'title': 'Beautiful weather app UI concepts we wish existed',
+        'date': 'May 21, 2020',
+        'color': Colors.redAccent.shade100,
+      },
+      {
+        'title':
+            "Spotify's Reema Bhagat on product design, music, and the key to a happy carrer",
+        'date': 'Feb 01, 2020',
+        'color': Colors.lightBlueAccent.shade100,
+      },
+      {
+        'title': "12 eye-catching mobile wallpaper",
+        'date': 'Feb 01, 2020',
+        'color': Colors.purple.shade300,
+      },
+      {
+        'title': "Design For Good: Join The Face Mask Challenge",
+        'date': 'Feb 01, 2020',
+        'color': Colors.pinkAccent.shade100,
+      },
+      {
+        'title': "eye-catching mobile wallpaper",
+        'date': 'Feb 01, 2020',
+        'color': Colors.green.shade300,
+      },
+    ];
 
     return WaterfallFlow.builder(
       gridDelegate: const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
