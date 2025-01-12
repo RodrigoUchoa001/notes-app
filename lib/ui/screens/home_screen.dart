@@ -16,18 +16,26 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade800,
-                borderRadius: BorderRadius.circular(10),
+          Material(
+            color: Colors.grey
+                .shade800, // set color here, so the inkwell animation appears
+            borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              onTap: () {},
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                height: 42,
+                width: 42,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Icon(Icons.search),
+                ),
               ),
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(right: 12), // half title spacing
-              child: Icon(Icons.search),
             ),
           ),
+          const SizedBox(width: 24),
         ],
       ),
       body: SafeArea(
