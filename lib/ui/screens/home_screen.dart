@@ -42,6 +42,25 @@ class HomeScreen extends StatelessWidget {
         minimum: EdgeInsets.symmetric(horizontal: 20),
         child: NoteCard(),
       ),
+      floatingActionButton: Material(
+        color: Colors
+            .grey.shade800, // set color here, so the inkwell animation appears
+        borderRadius: BorderRadius.circular(32),
+        child: InkWell(
+          onTap: () {},
+          borderRadius: BorderRadius.circular(32),
+          child: Container(
+            height: 52,
+            width: 52,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Icon(Icons.add, size: 32),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
