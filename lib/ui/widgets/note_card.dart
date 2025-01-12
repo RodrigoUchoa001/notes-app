@@ -63,13 +63,13 @@ class NoteCard extends StatelessWidget {
                   item['title'] as String,
                   style: const TextStyle(
                     fontSize: 18,
-                    color: Colors.black,
+                    // color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   item['date'] as String,
-                  style: const TextStyle(color: Colors.black54, fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               ],
             ),
