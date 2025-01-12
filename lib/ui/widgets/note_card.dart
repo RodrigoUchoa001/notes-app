@@ -43,15 +43,13 @@ class NoteCard extends StatelessWidget {
     return WaterfallFlow.builder(
       gridDelegate: const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Número de colunas
-        crossAxisSpacing: 8, // Espaçamento horizontal
-        mainAxisSpacing: 8, // Espaçamento vertical
+        crossAxisSpacing: 12, // Espaçamento horizontal
+        mainAxisSpacing: 12, // Espaçamento vertical
       ),
-      padding: const EdgeInsets.all(8),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
         return Container(
-          height: item['height'] as double,
           decoration: BoxDecoration(
             color: item['color'] as Color,
             borderRadius: BorderRadius.circular(8),
@@ -65,14 +63,13 @@ class NoteCard extends StatelessWidget {
                   item['title'] as String,
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 Text(
-                  item['description'] as String,
-                  style: const TextStyle(color: Colors.white),
+                  item['date'] as String,
+                  style: const TextStyle(color: Colors.black54, fontSize: 12),
                 ),
               ],
             ),
