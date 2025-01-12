@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/ui/widgets/note_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,8 +17,8 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        minimum: EdgeInsets.all(20),
-        child: Container(),
+        minimum: EdgeInsets.symmetric(horizontal: 20),
+        child: NoteCard(),
       ),
     );
   }
