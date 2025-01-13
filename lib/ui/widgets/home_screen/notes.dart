@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/ui/widgets/note_card.dart';
+import 'package:notes_app/ui/widgets/home_screen/note_card.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class Notes extends StatelessWidget {
