@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final themeProvider = StateProvider<bool>((ref) => false);
 
@@ -16,13 +17,15 @@ final ThemeData lightTheme = ThemeData(
     ));
 
 final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.blueGrey,
-    appBarTheme: AppBarTheme(
-      foregroundColor: Colors.white,
+  scaffoldBackgroundColor: Color(0xFF252525),
+  brightness: Brightness.dark,
+  primarySwatch: Colors.blueGrey,
+  appBarTheme: AppBarTheme(
+    foregroundColor: Colors.white,
+  ),
+  textTheme: TextTheme(
+    bodyMedium: GoogleFonts.nunito(
+      color: Colors.black,
     ),
-    textTheme: TextTheme(
-      bodyMedium: TextStyle(
-        color: Colors.black,
-      ),
-    ));
+  ),
+);
