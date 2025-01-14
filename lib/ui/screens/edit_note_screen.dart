@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 
 class NoteFields {
@@ -10,7 +12,7 @@ class NoteFields {
   NoteFields(this.titleController, this.dateController, this.contentController);
 }
 
-class EditNoteScreen extends StatelessWidget {
+class EditNoteScreen extends ConsumerWidget {
   final String titleText;
   final String dateText;
   final String contentText;
@@ -29,10 +31,12 @@ class EditNoteScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final titleController = TextEditingController(text: titleText);
     final contentController = TextEditingController(text: contentText);
     final dateController = TextEditingController(text: dateText);
+
+    final isEditMode = ref.watch(editModeProvider);
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -48,8 +52,10 @@ class EditNoteScreen extends StatelessWidget {
           ),
           Expanded(child: Container()),
           AppBarButton(
-            function: () {},
-            icon: Icons.edit,
+            function: () {
+              ref.read(editModeProvider.notifier).state = !isEditMode;
+            },
+            icon: isEditMode ? Icons.save : Icons.edit,
           ),
           const SizedBox(width: 24),
         ],
@@ -60,6 +66,7 @@ class EditNoteScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 16),
             TextFormField(
+              enabled: isEditMode ? true : false,
               decoration: InputDecoration.collapsed(hintText: 'Title'),
               maxLines: null,
               style: GoogleFonts.nunito(
@@ -81,7 +88,7 @@ class EditNoteScreen extends StatelessWidget {
                 : SizedBox(),
             const SizedBox(height: 20),
             TextFormField(
-              autofocus: contentController.text.isEmpty ? true : false,
+              enabled: isEditMode ? true : false,
               decoration:
                   InputDecoration.collapsed(hintText: 'Type something...'),
               maxLines: null,
