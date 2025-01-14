@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/ui/widgets/home_screen/notes.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -47,7 +48,18 @@ class HomeScreen extends StatelessWidget {
             .grey.shade800, // set color here, so the inkwell animation appears
         borderRadius: BorderRadius.circular(32),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const EditNoteScreen(
+                  backgroundColor: Colors.black,
+                  titleText: '',
+                  contentText: '',
+                  dateText: '',
+                ),
+              ),
+            );
+          },
           borderRadius: BorderRadius.circular(32),
           child: Container(
             height: 52,
