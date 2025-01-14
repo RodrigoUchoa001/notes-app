@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
+import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/home_screen/notes.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -21,24 +22,9 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          Material(
-            color: Color(
-                0xFF3B3B3B), // set color here, so the inkwell animation appears
-            borderRadius: BorderRadius.circular(15),
-            child: InkWell(
-              onTap: () {},
-              borderRadius: BorderRadius.circular(15),
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Center(
-                  child: Icon(Icons.search, size: 24),
-                ),
-              ),
-            ),
+          AppBarButton(
+            function: () {},
+            icon: Icons.search,
           ),
           const SizedBox(width: 25),
         ],

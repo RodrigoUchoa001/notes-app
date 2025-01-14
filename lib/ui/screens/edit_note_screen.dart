@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes_app/ui/widgets/app_bar_button.dart';
 
 class NoteFields {
   final String titleController;
@@ -41,44 +42,14 @@ class EditNoteScreen extends StatelessWidget {
         toolbarHeight: 86,
         actions: [
           const SizedBox(width: 24),
-          Material(
-            color: Color(
-                0xFF3B3B3B), // set color here, so the inkwell animation appears
-            borderRadius: BorderRadius.circular(15),
-            child: InkWell(
-              onTap: () => Navigator.pop(context),
-              borderRadius: BorderRadius.circular(15),
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Center(
-                  child: Icon(Icons.arrow_back, size: 24),
-                ),
-              ),
-            ),
+          AppBarButton(
+            function: () => Navigator.pop(context),
+            icon: Icons.arrow_back,
           ),
           Expanded(child: Container()),
-          Material(
-            color: Color(
-                0xFF3B3B3B), // set color here, so the inkwell animation appears
-            borderRadius: BorderRadius.circular(15),
-            child: InkWell(
-              onTap: () {},
-              borderRadius: BorderRadius.circular(15),
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Center(
-                  child: Icon(Icons.edit, size: 24),
-                ),
-              ),
-            ),
+          AppBarButton(
+            function: () {},
+            icon: Icons.edit,
           ),
           const SizedBox(width: 24),
         ],
@@ -94,6 +65,7 @@ class EditNoteScreen extends StatelessWidget {
               style: GoogleFonts.nunito(
                 color: getContrastingTextColor(backgroundColor),
                 fontSize: 35,
+                fontWeight: FontWeight.bold,
               ),
               keyboardType: TextInputType.multiline,
               controller: titleController,
