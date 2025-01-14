@@ -37,20 +37,20 @@ class EditNoteScreen extends StatelessWidget {
         toolbarHeight: 86,
         actions: [
           Material(
-            color: Colors.grey
-                .shade800, // set color here, so the inkwell animation appears
-            borderRadius: BorderRadius.circular(12),
+            color: Color(
+                0xFF3B3B3B), // set color here, so the inkwell animation appears
+            borderRadius: BorderRadius.circular(15),
             child: InkWell(
               onTap: () {},
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(15),
               child: Container(
-                height: 42,
-                width: 42,
+                height: 50,
+                width: 50,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: Center(
-                  child: Icon(Icons.edit),
+                  child: Icon(Icons.edit, size: 24),
                 ),
               ),
             ),
