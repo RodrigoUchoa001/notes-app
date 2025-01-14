@@ -38,6 +38,14 @@ class EditNoteScreen extends ConsumerWidget {
 
     final isEditMode = ref.watch(editModeProvider);
 
+    // function executed after the widget is builded. Used to enable the
+    // editMode if is a new note (the textfields are empty)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (titleText.isEmpty && contentText.isEmpty) {
+        ref.read(editModeProvider.notifier).state = true;
+      }
+    });
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
