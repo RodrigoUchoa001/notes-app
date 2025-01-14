@@ -59,7 +59,7 @@ class EditNoteScreen extends StatelessWidget {
               decoration: InputDecoration.collapsed(hintText: ''),
               maxLines: null,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
               keyboardType: TextInputType.multiline,
