@@ -12,11 +12,13 @@ class EditNoteScreen extends StatelessWidget {
   final String titleText;
   final String dateText;
   final String contentText;
+  final Color backgroundColor;
   const EditNoteScreen(
       {super.key,
       required this.titleText,
       required this.contentText,
-      required this.dateText});
+      required this.dateText,
+      required this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,8 @@ class EditNoteScreen extends StatelessWidget {
     final dateController = TextEditingController(text: dateText);
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         toolbarHeight: 86,
         actions: [
           Material(
