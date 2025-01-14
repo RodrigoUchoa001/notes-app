@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NoteFields {
   final String titleController;
@@ -13,16 +14,17 @@ class EditNoteScreen extends StatelessWidget {
   final String dateText;
   final String contentText;
   final Color backgroundColor;
-  const EditNoteScreen(
-      {super.key,
-      required this.titleText,
-      required this.contentText,
-      required this.dateText,
-      required this.backgroundColor});
+  const EditNoteScreen({
+    super.key,
+    required this.titleText,
+    required this.contentText,
+    required this.dateText,
+    required this.backgroundColor,
+  });
 
   Color getContrastingTextColor(Color color) {
     double luminance = color.computeLuminance();
-    return luminance > 0.5 ? Colors.black : Colors.white;
+    return (luminance + 0.1) > 0.5 ? Colors.black : Colors.white;
   }
 
   @override
@@ -34,8 +36,31 @@ class EditNoteScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: backgroundColor,
+        automaticallyImplyLeading: false,
         toolbarHeight: 86,
         actions: [
+          const SizedBox(width: 24),
+          Material(
+            color: Color(
+                0xFF3B3B3B), // set color here, so the inkwell animation appears
+            borderRadius: BorderRadius.circular(15),
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Center(
+                  child: Icon(Icons.arrow_back, size: 24),
+                ),
+              ),
+            ),
+          ),
+          Expanded(child: Container()),
           Material(
             color: Color(
                 0xFF3B3B3B), // set color here, so the inkwell animation appears
@@ -62,33 +87,40 @@ class EditNoteScreen extends StatelessWidget {
         minimum: EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
           children: [
+            const SizedBox(height: 16),
             TextFormField(
-              decoration: InputDecoration.collapsed(hintText: ''),
+              decoration: InputDecoration.collapsed(hintText: 'Title'),
               maxLines: null,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+              style: GoogleFonts.nunito(
                 color: getContrastingTextColor(backgroundColor),
+                fontSize: 35,
               ),
               keyboardType: TextInputType.multiline,
               controller: titleController,
             ),
-            const SizedBox(height: 16),
-            Text(dateController.text,
-                style:
-                    TextStyle(color: getContrastingTextColor(backgroundColor))),
-            const SizedBox(height: 16),
-            Divider(),
+            const SizedBox(height: 20),
+            dateController.text.isNotEmpty
+                ? Text(
+                    dateController.text,
+                    style: TextStyle(
+                      color: getContrastingTextColor(backgroundColor),
+                    ),
+                  )
+                : SizedBox(),
+            const SizedBox(height: 20),
             TextFormField(
-              decoration: InputDecoration.collapsed(hintText: ''),
+              autofocus: contentController.text.isEmpty ? true : false,
+              decoration:
+                  InputDecoration.collapsed(hintText: 'Type something...'),
               maxLines: null,
               keyboardType: TextInputType.multiline,
               controller: contentController,
-              style: TextStyle(
+              style: GoogleFonts.nunito(
                 color: getContrastingTextColor(backgroundColor),
+                fontSize: 23,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 61),
           ],
         ),
       ),
