@@ -20,6 +20,11 @@ class EditNoteScreen extends StatelessWidget {
       required this.dateText,
       required this.backgroundColor});
 
+  Color getContrastingTextColor(Color color) {
+    double luminance = color.computeLuminance();
+    return luminance > 0.5 ? Colors.black : Colors.white;
+  }
+
   @override
   Widget build(BuildContext context) {
     final titleController = TextEditingController(text: titleText);
@@ -63,18 +68,25 @@ class EditNoteScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
+                color: getContrastingTextColor(backgroundColor),
               ),
               keyboardType: TextInputType.multiline,
               controller: titleController,
             ),
             const SizedBox(height: 16),
-            Text(dateController.text, style: TextStyle(color: Colors.white54)),
+            Text(dateController.text,
+                style:
+                    TextStyle(color: getContrastingTextColor(backgroundColor))),
             const SizedBox(height: 16),
+            Divider(),
             TextFormField(
               decoration: InputDecoration.collapsed(hintText: ''),
               maxLines: null,
               keyboardType: TextInputType.multiline,
               controller: contentController,
+              style: TextStyle(
+                color: getContrastingTextColor(backgroundColor),
+              ),
             ),
             const SizedBox(height: 24),
           ],
