@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notes_app/controllers/user_controller.dart';
 import 'package:notes_app/ui/providers/theme_provider.dart';
 import 'package:notes_app/ui/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:notes_app/ui/screens/login_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -28,7 +30,9 @@ class MyApp extends ConsumerWidget {
       title: 'Notes App',
       theme: isDarkTheme ? lightTheme : darkTheme,
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: UserController.user != null
+          ? const HomeScreen()
+          : const LoginScreen(),
     );
   }
 }
