@@ -64,6 +64,8 @@ class UserInfoScreen extends StatelessWidget {
               FilledButton.tonalIcon(
                 onPressed: () async {
                   await UserController.signOut();
+
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const LoginScreen(),

@@ -31,11 +31,13 @@ class LoginScreen extends ConsumerWidget {
                   ref.read(islogginInProvider.notifier).state = true;
                   await UserController.loginWithGoogle();
 
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const HomeScreen(),
                     ),
                   );
+                  ref.read(islogginInProvider.notifier).state = false;
                 } catch (error) {
                   ref.read(islogginInProvider.notifier).state = false;
                   //
