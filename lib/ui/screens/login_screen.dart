@@ -31,7 +31,7 @@ class LoginScreen extends ConsumerWidget {
                   ref.read(islogginInProvider.notifier).state = true;
                   await UserController.loginWithGoogle();
 
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const HomeScreen(),
                     ),
@@ -40,9 +40,8 @@ class LoginScreen extends ConsumerWidget {
                   ref.read(islogginInProvider.notifier).state = false;
                   //
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                          "Ocorreu um erro durante o login! Tente novamente."),
+                    SnackBar(
+                      content: Text("A error occurred! ${error.toString()}"),
                     ),
                   );
                   UserController.signOut();
