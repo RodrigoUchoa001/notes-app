@@ -4,6 +4,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 class UserController {
   static User? user = FirebaseAuth.instance.currentUser;
 
+  // TO NOT GET ERROR "ApiException: 10" HERE: when using "flutterfire configure"
+  // set the name package as "com.example.(flutter_name_app)". Then set the SHA
+  // codes.
   static Future<User?> loginWithGoogle() async {
     final googleAccount = await GoogleSignIn().signIn();
 
