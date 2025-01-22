@@ -10,7 +10,7 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLogginIn = ref.watch(islogginInProvider);
+    final isLoggingIn = ref.watch(isloggingInProvider);
 
     return Scaffold(
       body: Center(
@@ -28,7 +28,7 @@ class LoginScreen extends ConsumerWidget {
             FilledButton.icon(
               onPressed: () async {
                 try {
-                  ref.read(islogginInProvider.notifier).state = true;
+                  ref.read(isloggingInProvider.notifier).state = true;
                   await UserController.loginWithGoogle();
 
                   Navigator.of(context).popUntil((route) => route.isFirst);
@@ -37,9 +37,9 @@ class LoginScreen extends ConsumerWidget {
                       builder: (context) => const HomeScreen(),
                     ),
                   );
-                  ref.read(islogginInProvider.notifier).state = false;
+                  ref.read(isloggingInProvider.notifier).state = false;
                 } catch (error) {
-                  ref.read(islogginInProvider.notifier).state = false;
+                  ref.read(isloggingInProvider.notifier).state = false;
                   //
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -49,7 +49,7 @@ class LoginScreen extends ConsumerWidget {
                   UserController.signOut();
                 }
               },
-              icon: isLogginIn
+              icon: isLoggingIn
                   ? const SizedBox(
                       height: 24.0,
                       width: 24.0,

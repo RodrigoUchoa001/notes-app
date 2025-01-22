@@ -1,3 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final islogginInProvider = StateProvider<bool>((ref) => false);
+// controls the logging in animation.
+final isloggingInProvider = StateProvider<bool>((ref) => false);
