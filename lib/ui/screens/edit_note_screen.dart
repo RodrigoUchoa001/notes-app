@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/ui/providers/edit_mode_provider.dart';
+import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
+import 'package:notes_app/ui/widgets/edit_note_screen/background_color_selector.dart';
 
 class NoteFields {
   final String titleController;
@@ -37,19 +39,23 @@ class EditNoteScreen extends ConsumerWidget {
     final dateController = TextEditingController(text: dateText);
 
     final isEditMode = ref.watch(editModeProvider);
+    final backgroundColorFromProvider = ref.watch(noteBackgroundColorProvider);
 
     // function executed after the widget is builded. Used to enable the
     // editMode if is a new note (the textfields are empty)
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (titleText.isEmpty && contentText.isEmpty) {
-        ref.read(editModeProvider.notifier).state = true;
-      }
+      // set in start as not editMode (DONT WORK!!!!!!!!)
+      // ref.read(editModeProvider.notifier).state = false;
+
+      // if (titleText.isEmpty && contentText.isEmpty) {
+      //   ref.read(editModeProvider.notifier).state = true;
+      // }
     });
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundColorFromProvider,
       appBar: AppBar(
-        backgroundColor: backgroundColor,
+        backgroundColor: backgroundColorFromProvider,
         automaticallyImplyLeading: false,
         toolbarHeight: 86,
         actions: [
@@ -73,44 +79,50 @@ class EditNoteScreen extends ConsumerWidget {
         child: ListView(
           children: [
             const SizedBox(height: 16),
-            TextFormField(
-              enabled: isEditMode ? true : false,
-              decoration: InputDecoration.collapsed(hintText: 'Title'),
-              maxLines: null,
-              style: GoogleFonts.nunito(
-                color: getContrastingTextColor(backgroundColor),
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-              ),
-              keyboardType: TextInputType.multiline,
-              controller: titleController,
+            Column(
+              children: [
+                TextFormField(
+                  enabled: isEditMode ? true : false,
+                  decoration: InputDecoration.collapsed(hintText: 'Title'),
+                  maxLines: null,
+                  style: GoogleFonts.nunito(
+                    color: getContrastingTextColor(backgroundColorFromProvider),
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  controller: titleController,
+                ),
+                const SizedBox(height: 20),
+                dateController.text.isNotEmpty
+                    ? Text(
+                        dateController.text,
+                        style: TextStyle(
+                          color: getContrastingTextColor(
+                              backgroundColorFromProvider),
+                        ),
+                      )
+                    : SizedBox(),
+                const SizedBox(height: 20),
+                TextFormField(
+                  enabled: isEditMode ? true : false,
+                  decoration:
+                      InputDecoration.collapsed(hintText: 'Type something...'),
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  controller: contentController,
+                  style: GoogleFonts.nunito(
+                    color: getContrastingTextColor(backgroundColor),
+                    fontSize: 23,
+                  ),
+                ),
+                const SizedBox(height: 61),
+              ],
             ),
-            const SizedBox(height: 20),
-            dateController.text.isNotEmpty
-                ? Text(
-                    dateController.text,
-                    style: TextStyle(
-                      color: getContrastingTextColor(backgroundColor),
-                    ),
-                  )
-                : SizedBox(),
-            const SizedBox(height: 20),
-            TextFormField(
-              enabled: isEditMode ? true : false,
-              decoration:
-                  InputDecoration.collapsed(hintText: 'Type something...'),
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              controller: contentController,
-              style: GoogleFonts.nunito(
-                color: getContrastingTextColor(backgroundColor),
-                fontSize: 23,
-              ),
-            ),
-            const SizedBox(height: 61),
           ],
         ),
       ),
+      bottomNavigationBar: BackgroundColorSelector(),
     );
   }
 }
