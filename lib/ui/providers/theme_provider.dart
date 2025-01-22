@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// controls if the app is using light or dark mode themes.
 final themeProvider = StateProvider<bool>((ref) => false);
 
 final ThemeData lightTheme = ThemeData(
