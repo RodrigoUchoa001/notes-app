@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notes_app/controllers/user_controller.dart';
 
@@ -7,7 +9,7 @@ class NoteController {
   Future<void> saveNote({
     required String title,
     required String content,
-    required String backgroundColor,
+    required Color backgroundColor,
   }) async {
     final user = UserController.user;
     if (user == null) {
@@ -22,7 +24,7 @@ class NoteController {
       'title': title,
       'content': content,
       'date': FieldValue.serverTimestamp(),
-      'backgroundColor': backgroundColor,
+      'backgroundColor': colorToMap(backgroundColor),
     });
   }
 
@@ -41,10 +43,35 @@ class NoteController {
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data();
+      final colorMap = data['backgroundColor'] as Map<String, dynamic>;
+      final backgroundColor = mapToColor(colorMap);
+
       return {
         'id': doc.id,
-        ...data,
+        'title': data['title'],
+        'content': data['content'],
+        'date': data['date'],
+        'backgroundColor': backgroundColor,
       };
     }).toList();
   }
+}
+
+// functions to convert color to its channels, to save on firestore
+Map<String, double> colorToMap(Color color) {
+  return {
+    'alpha': color.a,
+    'red': color.r,
+    'green': color.g,
+    'blue': color.b,
+  };
+}
+
+Color mapToColor(Map<String, dynamic> map) {
+  return Color.fromARGB(
+    map['alpha'] as int,
+    map['red'] as int,
+    map['green'] as int,
+    map['blue'] as int,
+  );
 }
