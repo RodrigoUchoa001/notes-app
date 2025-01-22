@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
@@ -28,7 +29,7 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           AppBarButton(
             function: () {},
-            icon: Icons.search,
+            icon: FontAwesomeIcons.magnifyingGlass,
           ),
           const SizedBox(width: 12),
           FutureBuilder(
@@ -49,7 +50,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return const Icon(Icons.error);
+                return const FaIcon(FontAwesomeIcons.xmark);
               } else {
                 return const CircularProgressIndicator();
               }
@@ -100,7 +101,7 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
           child: Center(
-            child: Icon(Icons.add, size: 48),
+            child: FaIcon(FontAwesomeIcons.plus, size: 32),
           ),
         ),
       ),

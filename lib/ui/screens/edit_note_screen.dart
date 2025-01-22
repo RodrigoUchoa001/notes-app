@@ -60,14 +60,16 @@ class EditNoteScreen extends ConsumerWidget {
           const SizedBox(width: 24),
           AppBarButton(
             function: () => Navigator.pop(context),
-            icon: Icons.arrow_back,
+            icon: FontAwesomeIcons.chevronLeft,
           ),
           Expanded(child: Container()),
           AppBarButton(
             function: () {
               ref.read(editModeProvider.notifier).state = !isEditMode;
             },
-            icon: isEditMode ? Icons.save : Icons.edit,
+            icon: isEditMode
+                ? FontAwesomeIcons.floppyDisk
+                : FontAwesomeIcons.penToSquare,
           ),
           const SizedBox(width: 24),
         ],

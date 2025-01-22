@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/user_controller.dart';
 import 'package:notes_app/ui/providers/is_logging_in_provider.dart';
@@ -57,7 +58,7 @@ class LoginScreen extends ConsumerWidget {
                         color: Colors.black,
                       ),
                     )
-                  : Icon(Icons.login),
+                  : FaIcon(FontAwesomeIcons.arrowRightToBracket),
               label: const Text("Login with Google"),
             ),
           ],

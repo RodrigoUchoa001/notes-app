@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/user_controller.dart';
 import 'package:notes_app/ui/screens/login_screen.dart';
+import 'package:notes_app/ui/widgets/app_bar_button.dart';
 
 class UserInfoScreen extends StatelessWidget {
   const UserInfoScreen({super.key});
@@ -14,12 +16,15 @@ class UserInfoScreen extends StatelessWidget {
         toolbarHeight: 86,
         backgroundColor: Colors.transparent,
         titleSpacing: 25,
-        title: Text(
-          "Account",
-          style: GoogleFonts.nunito(
-            fontWeight: FontWeight.w600,
+        automaticallyImplyLeading: false,
+        actions: [
+          const SizedBox(width: 24),
+          AppBarButton(
+            function: () => Navigator.pop(context),
+            icon: FontAwesomeIcons.chevronLeft,
           ),
-        ),
+          Expanded(child: Container()),
+        ],
       ),
       body: SafeArea(
         minimum: const EdgeInsets.all(20),
@@ -54,7 +59,7 @@ class UserInfoScreen extends StatelessWidget {
                       ],
                     );
                   } else if (snapshot.hasError) {
-                    return const Icon(Icons.error);
+                    return const FaIcon(FontAwesomeIcons.xmark);
                   } else {
                     return const CircularProgressIndicator();
                   }
@@ -72,7 +77,7 @@ class UserInfoScreen extends StatelessWidget {
                     ),
                   );
                 },
-                icon: const Icon(Icons.logout_rounded),
+                icon: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
                 label: Text(
                   "Sign Out",
                   style: GoogleFonts.nunito(),
