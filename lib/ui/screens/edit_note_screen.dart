@@ -18,13 +18,11 @@ class EditNoteScreen extends ConsumerWidget {
   final String titleText;
   final String dateText;
   final String contentText;
-  final Color backgroundColor;
   const EditNoteScreen({
     super.key,
     required this.titleText,
     required this.contentText,
     required this.dateText,
-    required this.backgroundColor,
   });
 
   Color getContrastingTextColor(Color color) {
@@ -79,46 +77,42 @@ class EditNoteScreen extends ConsumerWidget {
         child: ListView(
           children: [
             const SizedBox(height: 16),
-            Column(
-              children: [
-                TextFormField(
-                  enabled: isEditMode ? true : false,
-                  decoration: InputDecoration.collapsed(hintText: 'Title'),
-                  maxLines: null,
-                  style: GoogleFonts.nunito(
-                    color: getContrastingTextColor(backgroundColorFromProvider),
-                    fontSize: 35,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  controller: titleController,
-                ),
-                const SizedBox(height: 20),
-                dateController.text.isNotEmpty
-                    ? Text(
-                        dateController.text,
-                        style: TextStyle(
-                          color: getContrastingTextColor(
-                              backgroundColorFromProvider),
-                        ),
-                      )
-                    : SizedBox(),
-                const SizedBox(height: 20),
-                TextFormField(
-                  enabled: isEditMode ? true : false,
-                  decoration:
-                      InputDecoration.collapsed(hintText: 'Type something...'),
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                  controller: contentController,
-                  style: GoogleFonts.nunito(
-                    color: getContrastingTextColor(backgroundColor),
-                    fontSize: 23,
-                  ),
-                ),
-                const SizedBox(height: 61),
-              ],
+            TextFormField(
+              enabled: isEditMode ? true : false,
+              decoration: InputDecoration.collapsed(hintText: 'Title'),
+              maxLines: null,
+              style: GoogleFonts.nunito(
+                color: getContrastingTextColor(backgroundColorFromProvider),
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+              ),
+              keyboardType: TextInputType.multiline,
+              controller: titleController,
             ),
+            const SizedBox(height: 20),
+            dateController.text.isNotEmpty
+                ? Text(
+                    dateController.text,
+                    style: TextStyle(
+                      color:
+                          getContrastingTextColor(backgroundColorFromProvider),
+                    ),
+                  )
+                : SizedBox(),
+            const SizedBox(height: 20),
+            TextFormField(
+              enabled: isEditMode ? true : false,
+              decoration:
+                  InputDecoration.collapsed(hintText: 'Type something...'),
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              controller: contentController,
+              style: GoogleFonts.nunito(
+                color: getContrastingTextColor(backgroundColorFromProvider),
+                fontSize: 23,
+              ),
+            ),
+            const SizedBox(height: 61),
           ],
         ),
       ),
