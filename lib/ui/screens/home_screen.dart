@@ -65,7 +65,6 @@ class HomeScreen extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EditNoteScreen(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 titleText: '',
                 contentText: '',
                 dateText: '',
