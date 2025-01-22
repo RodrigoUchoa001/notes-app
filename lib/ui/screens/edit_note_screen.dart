@@ -101,6 +101,7 @@ class EditNoteScreen extends ConsumerWidget {
                 : SizedBox(),
             const SizedBox(height: 20),
             TextFormField(
+              autofocus: true,
               enabled: isEditMode ? true : false,
               decoration:
                   InputDecoration.collapsed(hintText: 'Type something...'),
@@ -116,7 +117,7 @@ class EditNoteScreen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BackgroundColorSelector(),
+      bottomSheet: BackgroundColorSelector(),
     );
   }
 }
