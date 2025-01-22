@@ -1,16 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/ui/screens/user_info_screen.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/home_screen/notes.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 86,
@@ -62,6 +64,9 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: InkWell(
         onTap: () {
+          ref.read(noteBackgroundColorProvider.notifier).state =
+              Color(0xFF252525);
+
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EditNoteScreen(
