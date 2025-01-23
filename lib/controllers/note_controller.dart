@@ -20,10 +20,16 @@ class NoteController {
     final notesCollection =
         _firestore.collection('Users').doc(userId).collection('Notes');
 
+    final actualDate = DateTime.now();
+
     await notesCollection.add({
       'title': title,
       'content': content,
-      'date': FieldValue.serverTimestamp(),
+      'date': {
+        'day': actualDate.day,
+        'month': actualDate.month,
+        'year': actualDate.year,
+      },
       'backgroundColor': colorToMap(backgroundColor),
     });
   }
