@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes_app/controllers/note_controller.dart';
 import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/edit_note_screen/background_color_selector.dart';
 
-class NoteFields {
-  final String titleController;
-  final String dateController;
-  final String contentController;
-
-  NoteFields(this.titleController, this.dateController, this.contentController);
-}
-
-class EditNoteScreen extends ConsumerWidget {
+class EditNoteScreen extends ConsumerStatefulWidget {
+  const EditNoteScreen(
+      {required this.titleText,
+      required this.dateText,
+      required this.contentText,
+      super.key});
   final String titleText;
   final String dateText;
   final String contentText;
-  const EditNoteScreen({
-    super.key,
-    required this.titleText,
-    required this.contentText,
-    required this.dateText,
-  });
+
+  @override
+  ConsumerState<EditNoteScreen> createState() => _EditNoteScreenState();
+}
+
+class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+  final dateController = TextEditingController();
 
   Color getContrastingTextColor(Color color) {
     double luminance = color.computeLuminance();
@@ -31,11 +33,15 @@ class EditNoteScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final titleController = TextEditingController(text: titleText);
-    final contentController = TextEditingController(text: contentText);
-    final dateController = TextEditingController(text: dateText);
+  void initState() {
+    super.initState();
+    titleController.text = widget.titleText;
+    contentController.text = widget.contentText;
+    dateController.text = widget.dateText;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     final isEditMode = ref.watch(editModeProvider);
     final backgroundColorFromProvider = ref.watch(noteBackgroundColorProvider);
 
@@ -64,7 +70,7 @@ class EditNoteScreen extends ConsumerWidget {
           ),
           Expanded(child: Container()),
           AppBarButton(
-            function: () {
+            function: () async {
               ref.read(editModeProvider.notifier).state = !isEditMode;
 
               // if finished editing, save to firestore database...
