@@ -66,6 +66,29 @@ class EditNoteScreen extends ConsumerWidget {
           AppBarButton(
             function: () {
               ref.read(editModeProvider.notifier).state = !isEditMode;
+
+              // if finished editing, save to firestore database...
+              if (!ref.read(editModeProvider.notifier).state) {
+                try {
+                  await NoteController().saveNote(
+                    title: titleController.text,
+                    content: contentController.text,
+                    backgroundColor: backgroundColorFromProvider,
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Note saved!"),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("A error occurred! ${e.toString()}"),
+                    ),
+                  );
+                }
+              }
             },
             icon: isEditMode
                 ? FontAwesomeIcons.floppyDisk
