@@ -6,7 +6,7 @@ import 'package:notes_app/controllers/user_controller.dart';
 class NoteController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> saveNote({
+  Future<String?> saveNote({
     required String title,
     required String content,
     required Color backgroundColor,
@@ -36,8 +36,10 @@ class NoteController {
 
     if (noteId != null) {
       await notesCollection.doc(noteId).set(noteData);
+      return null;
     } else {
-      await notesCollection.add(noteData);
+      final doc = await notesCollection.add(noteData);
+      return doc.id;
     }
   }
 
