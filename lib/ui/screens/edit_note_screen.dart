@@ -13,10 +13,12 @@ class EditNoteScreen extends ConsumerStatefulWidget {
       {required this.titleText,
       required this.dateText,
       required this.contentText,
+      this.noteId,
       super.key});
   final String titleText;
   final String dateText;
   final String contentText;
+  final String? noteId;
 
   @override
   ConsumerState<EditNoteScreen> createState() => _EditNoteScreenState();
@@ -26,6 +28,8 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final dateController = TextEditingController();
+
+  String? newNoteId;
 
   Color getContrastingTextColor(Color color) {
     double luminance = color.computeLuminance();
@@ -37,7 +41,8 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     super.initState();
     titleController.text = widget.titleText;
     contentController.text = widget.contentText;
-    dateController.text = widget.dateText;
+
+    newNoteId = widget.noteId;
   }
 
   @override
@@ -76,11 +81,16 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               // if finished editing, save to firestore database...
               if (!ref.read(editModeProvider.notifier).state) {
                 try {
-                  await NoteController().saveNote(
+                  final docId = await NoteController().saveNote(
                     title: titleController.text,
                     content: contentController.text,
                     backgroundColor: backgroundColorFromProvider,
+                    noteId: newNoteId,
                   );
+
+                  if (newNoteId == null) {
+                    newNoteId = docId;
+                  }
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
