@@ -10,6 +10,7 @@ class NoteController {
     required String title,
     required String content,
     required Color backgroundColor,
+    String? noteId,
   }) async {
     final user = UserController.user;
     if (user == null) {
@@ -22,7 +23,7 @@ class NoteController {
 
     final actualDate = DateTime.now();
 
-    await notesCollection.add({
+    final noteData = {
       'title': title,
       'content': content,
       'date': {
@@ -31,7 +32,13 @@ class NoteController {
         'year': actualDate.year,
       },
       'backgroundColor': colorToMap(backgroundColor),
-    });
+    };
+
+    if (noteId != null) {
+      await notesCollection.doc(noteId).set(noteData);
+    } else {
+      await notesCollection.add(noteData);
+    }
   }
 
   Future<List<Map<String, dynamic>>> getNotes() async {
