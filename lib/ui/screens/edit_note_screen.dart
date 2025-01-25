@@ -129,16 +129,12 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               controller: titleController,
             ),
             const SizedBox(height: 20),
-            dateController.text.isNotEmpty
-                ? Text(
-                    dateController.text,
-                    style: TextStyle(
-                      color:
-                          getContrastingTextColor(backgroundColorFromProvider),
-                    ),
-                  )
-                : SizedBox(),
-            const SizedBox(height: 20),
+            Text(
+              widget.dateText,
+              style: TextStyle(
+                color: getContrastingTextColor(backgroundColorFromProvider),
+              ),
+            ),
             TextFormField(
               autofocus: true,
               enabled: isEditMode ? true : false,
