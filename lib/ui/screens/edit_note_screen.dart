@@ -124,13 +124,14 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               keyboardType: TextInputType.multiline,
               controller: titleController,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Text(
               widget.dateText,
               style: TextStyle(
                 color: getContrastingTextColor(backgroundColorFromProvider),
               ),
             ),
+            const SizedBox(height: 20),
             TextFormField(
               autofocus: true,
               enabled: isEditMode ? true : false,
@@ -148,7 +149,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
           ],
         ),
       ),
-      bottomSheet: BackgroundColorSelector(),
+      bottomSheet: isEditMode ? BackgroundColorSelector() : const SizedBox(),
     );
   }
 }
