@@ -9,11 +9,16 @@ import 'package:notes_app/ui/screens/user_info_screen.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/home_screen/notes.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 86,
@@ -61,7 +66,12 @@ class HomeScreen extends ConsumerWidget {
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 20),
-        child: Notes(),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {});
+          },
+          child: Notes(),
+        ),
       ),
       floatingActionButton: InkWell(
         onTap: () {
