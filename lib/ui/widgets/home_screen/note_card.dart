@@ -8,12 +8,14 @@ class NoteCard extends ConsumerWidget {
   final String title;
   final String date;
   final String content;
+  final String noteId;
   const NoteCard(
       {super.key,
       required this.color,
       required this.title,
       required this.date,
-      required this.content});
+      required this.content,
+      required this.noteId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +29,7 @@ class NoteCard extends ConsumerWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EditNoteScreen(
+                noteId: noteId,
                 titleText: title,
                 contentText: content,
                 dateText: date,
@@ -39,6 +42,9 @@ class NoteCard extends ConsumerWidget {
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: Colors.white24,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
