@@ -8,46 +8,6 @@ class Notes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      {
-        'title': 'How to make your personal brand stand out online',
-        'date': 'May 21, 2020',
-        'color': Colors.redAccent.shade100,
-        'content': 'abcder'
-      },
-      {
-        'title': 'Beautiful weather app UI concepts we wish existed',
-        'date': 'May 21, 2020',
-        'color': Colors.redAccent.shade100,
-        'content': 'asdasdasfasfasd'
-      },
-      {
-        'title':
-            "Spotify's Reema Bhagat on product design, music, and the key to a happy carrer",
-        'date': 'Feb 01, 2020',
-        'color': Colors.lightBlueAccent.shade100,
-        'content': '523523242343'
-      },
-      {
-        'title': "12 eye-catching mobile wallpaper",
-        'date': 'Feb 01, 2020',
-        'color': Colors.purple.shade300,
-        'content': '2c3423r2q3c5r2c'
-      },
-      {
-        'title': "Design For Good: Join The Face Mask Challenge",
-        'date': 'Feb 01, 2020',
-        'color': Colors.pinkAccent.shade100,
-        'content': 'f20935029//*-/-*/'
-      },
-      {
-        'title': "eye-catching mobile wallpaper",
-        'date': 'Feb 01, 2020',
-        'color': Colors.green.shade300,
-        'content': '340j243598h428952h12312*/-'
-      },
-    ];
-
     return FutureBuilder(
       future: NoteController().getNotes(),
       builder: (context, snapshot) {
