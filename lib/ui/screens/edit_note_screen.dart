@@ -7,6 +7,7 @@ import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/edit_note_screen/background_color_selector.dart';
+import 'package:notes_app/utils.dart';
 
 class EditNoteScreen extends ConsumerStatefulWidget {
   const EditNoteScreen(
@@ -30,11 +31,6 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
   final dateController = TextEditingController();
 
   String? newNoteId;
-
-  Color getContrastingTextColor(Color color) {
-    double luminance = color.computeLuminance();
-    return (luminance + 0.1) > 0.5 ? Colors.black : Colors.white;
-  }
 
   @override
   void initState() {
