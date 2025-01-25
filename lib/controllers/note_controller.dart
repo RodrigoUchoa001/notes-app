@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_app/controllers/user_controller.dart';
 
 class NoteController {
@@ -43,7 +44,7 @@ class NoteController {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getNotes() async {
+  Future<List<NoteData>> getNotes() async {
     final user = UserController.user;
     if (user == null) {
       throw Exception('User not authenticated!');
@@ -61,13 +62,17 @@ class NoteController {
       final colorMap = data['backgroundColor'] as Map<String, dynamic>;
       final backgroundColor = mapToColor(colorMap);
 
-      return {
-        'id': doc.id,
-        'title': data['title'],
-        'content': data['content'],
-        'date': data['date'],
-        'backgroundColor': backgroundColor,
-      };
+      return NoteData(
+        noteId: doc.id,
+        title: data['title'],
+        content: data['content'],
+        date: DateTime(
+          data['date']['year'],
+          data['date']['month'],
+          data['date']['day'],
+        ),
+        color: backgroundColor,
+      );
     }).toList();
   }
 }
@@ -83,10 +88,30 @@ Map<String, double> colorToMap(Color color) {
 }
 
 Color mapToColor(Map<String, dynamic> map) {
-  return Color.fromARGB(
-    map['alpha'] as int,
-    map['red'] as int,
-    map['green'] as int,
-    map['blue'] as int,
+  return Color.from(
+    alpha: map['alpha'],
+    red: map['red'],
+    green: map['green'],
+    blue: map['blue'],
   );
+}
+
+class NoteData {
+  String noteId;
+  String title;
+  String content;
+  DateTime date;
+  Color color;
+
+  NoteData({
+    required this.noteId,
+    required this.title,
+    required this.content,
+    required this.date,
+    required this.color,
+  });
+
+  String dateToString() {
+    return DateFormat.yMMMd('en_US').format(date);
+  }
 }
