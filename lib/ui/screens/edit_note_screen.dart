@@ -88,9 +88,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                     noteId: newNoteId,
                   );
 
-                  if (newNoteId == null) {
-                    newNoteId = docId;
-                  }
+                  newNoteId ??= docId;
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
