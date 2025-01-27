@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:notes_app/ui/providers/note_background_color_provider.dart';
-import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/utils.dart';
 
 class NoteCard extends ConsumerWidget {
