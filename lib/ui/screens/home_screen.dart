@@ -74,11 +74,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
       floatingActionButton: InkWell(
-        onTap: () {
+        onTap: () async {
           ref.read(noteBackgroundColorProvider.notifier).state =
               Color(0xFF252525);
 
-          Navigator.of(context).push(
+          // wait for the screen to come back from EditNoteScreen to HomeScreen,
+          // then setState to reload the notes
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EditNoteScreen(
                 titleText: '',
@@ -87,6 +89,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           );
+
+          setState(() {});
         },
         borderRadius: BorderRadius.circular(72),
         child: Container(
