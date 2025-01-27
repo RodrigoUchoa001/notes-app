@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes_app/controllers/note_controller.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/ui/screens/user_info_screen.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
-import 'package:notes_app/ui/widgets/home_screen/notes.dart';
+import 'package:notes_app/ui/widgets/home_screen/note_card.dart';
+import 'package:waterfall_flow/waterfall_flow.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -70,7 +72,62 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onRefresh: () async {
             setState(() {});
           },
-          child: Notes(),
+          child: FutureBuilder(
+            future: NoteController().getNotes(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text("ERRO: ${snapshot.error.toString()}"),
+                );
+              } else if (snapshot.data!.isEmpty) {
+                return Center(
+                  child: const Text("NENHUMA NOTA"),
+                );
+              }
+              return WaterfallFlow.builder(
+                gridDelegate:
+                    const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Número de colunas
+                  crossAxisSpacing: 12, // Espaçamento horizontal
+                  mainAxisSpacing: 12, // Espaçamento vertical
+                ),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final data = snapshot.data![index];
+
+                  // wait for the screen to come back from EditNoteScreen to HomeScreen,
+                  // then setState to reload the notes
+                  return GestureDetector(
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditNoteScreen(
+                            noteId: data.noteId,
+                            titleText: data.title,
+                            contentText: data.content,
+                            dateText: data.dateToString(),
+                          ),
+                        ),
+                      );
+
+                      setState(() {});
+                    },
+                    child: NoteCard(
+                      noteId: data.noteId,
+                      title: data.title,
+                      content: data.content,
+                      color: data.color,
+                      date: data.dateToString(),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: InkWell(

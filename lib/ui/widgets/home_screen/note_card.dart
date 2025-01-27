@@ -20,57 +20,36 @@ class NoteCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Material(
-      color: color,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: () {
-          ref.read(noteBackgroundColorProvider.notifier).state = color;
-
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => EditNoteScreen(
-                noteId: noteId,
-                titleText: title,
-                contentText: content,
-                dateText: date,
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.white24,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 18,
+                color: getContrastingTextColor(color),
+                // color: Colors.black,
               ),
             ),
-          );
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.white24,
+            const SizedBox(height: 16),
+            Text(
+              date,
+              style: TextStyle(
+                fontSize: 12,
+                color: getContrastingTextColor(color),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: getContrastingTextColor(color),
-                    // color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  date,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: getContrastingTextColor(color),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ],
         ),
       ),
     );
