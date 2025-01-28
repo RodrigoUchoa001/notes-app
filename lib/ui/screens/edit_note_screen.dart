@@ -109,56 +109,65 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
-          children: [
-            const SizedBox(height: 16),
-            TextFormField(
-              enabled: isEditMode ? true : false,
-              decoration: InputDecoration.collapsed(
-                hintText: 'Title',
-                hintStyle: TextStyle(
-                  color: getContrastingTextColor(backgroundColorFromProvider)
-                      .withAlpha(150),
+        child: Hero(
+          tag: widget.noteId ?? 'newNote', // Tag usada na HomeScreen
+
+          child: Material(
+            color: Colors.transparent,
+            child: ListView(
+              children: [
+                const SizedBox(height: 16),
+                TextFormField(
+                  enabled: isEditMode ? true : false,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'Title',
+                    hintStyle: TextStyle(
+                      color:
+                          getContrastingTextColor(backgroundColorFromProvider)
+                              .withAlpha(150),
+                    ),
+                  ),
+                  maxLines: null,
+                  style: GoogleFonts.nunito(
+                    color: getContrastingTextColor(backgroundColorFromProvider),
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  controller: titleController,
                 ),
-              ),
-              maxLines: null,
-              style: GoogleFonts.nunito(
-                color: getContrastingTextColor(backgroundColorFromProvider),
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-              ),
-              keyboardType: TextInputType.multiline,
-              controller: titleController,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              widget.dateText,
-              style: TextStyle(
-                color: getContrastingTextColor(backgroundColorFromProvider)
-                    .withAlpha(200),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              autofocus: true,
-              enabled: isEditMode ? true : false,
-              decoration: InputDecoration.collapsed(
-                hintText: 'Type something...',
-                hintStyle: TextStyle(
-                  color: getContrastingTextColor(backgroundColorFromProvider)
-                      .withAlpha(150),
+                const SizedBox(height: 16),
+                Text(
+                  widget.dateText,
+                  style: TextStyle(
+                    color: getContrastingTextColor(backgroundColorFromProvider)
+                        .withAlpha(200),
+                  ),
                 ),
-              ),
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              controller: contentController,
-              style: GoogleFonts.nunito(
-                color: getContrastingTextColor(backgroundColorFromProvider),
-                fontSize: 23,
-              ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  autofocus: true,
+                  enabled: isEditMode ? true : false,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'Type something...',
+                    hintStyle: TextStyle(
+                      color:
+                          getContrastingTextColor(backgroundColorFromProvider)
+                              .withAlpha(150),
+                    ),
+                  ),
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  controller: contentController,
+                  style: GoogleFonts.nunito(
+                    color: getContrastingTextColor(backgroundColorFromProvider),
+                    fontSize: 23,
+                  ),
+                ),
+                const SizedBox(height: 61),
+              ],
             ),
-            const SizedBox(height: 61),
-          ],
+          ),
         ),
       ),
       bottomSheet: isEditMode ? BackgroundColorSelector() : const SizedBox(),
