@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/note_controller.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
+import 'package:notes_app/ui/screens/search_screen.dart';
 import 'package:notes_app/ui/screens/user_info_screen.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/home_screen/note_card.dart';
@@ -35,7 +36,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         actions: [
           AppBarButton(
-            function: () {},
+            function: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SearchScreen(),
+                ),
+              );
+            },
             icon: FontAwesomeIcons.magnifyingGlass,
           ),
           const SizedBox(width: 12),
@@ -103,6 +110,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   // then setState to reload the notes
                   return GestureDetector(
                     onTap: () async {
+                      ref.read(noteBackgroundColorProvider.notifier).state =
+                          data.color;
+
                       await Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => EditNoteScreen(
