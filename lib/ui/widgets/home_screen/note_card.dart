@@ -31,20 +31,30 @@ class NoteCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                color: getContrastingTextColor(color),
-                // color: Colors.black,
-              ),
-            ),
+            title.isNotEmpty
+                ? Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: getContrastingTextColor(color),
+                      // color: Colors.black,
+                    ),
+                  )
+                : Text(
+                    "No title",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: getContrastingTextColor(color).withAlpha(230),
+                      fontStyle: FontStyle.italic,
+                      // color: Colors.black,
+                    ),
+                  ),
             const SizedBox(height: 16),
             Text(
               date,
               style: TextStyle(
                 fontSize: 12,
-                color: getContrastingTextColor(color),
+                color: getContrastingTextColor(color).withAlpha(200),
               ),
             ),
           ],
