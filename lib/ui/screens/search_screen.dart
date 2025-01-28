@@ -74,7 +74,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
+        child: ListView(
           children: [
             TextFormField(
               autofocus: true,
@@ -86,6 +86,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 fontSize: 23,
               ),
             ),
+            const SizedBox(height: 16),
             FutureBuilder(
               future: NoteController().getNotes(),
               builder: (context, snapshot) {
