@@ -114,7 +114,13 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             const SizedBox(height: 16),
             TextFormField(
               enabled: isEditMode ? true : false,
-              decoration: InputDecoration.collapsed(hintText: 'Title'),
+              decoration: InputDecoration.collapsed(
+                hintText: 'Title',
+                hintStyle: TextStyle(
+                  color: getContrastingTextColor(backgroundColorFromProvider)
+                      .withAlpha(150),
+                ),
+              ),
               maxLines: null,
               style: GoogleFonts.nunito(
                 color: getContrastingTextColor(backgroundColorFromProvider),
@@ -128,15 +134,21 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             Text(
               widget.dateText,
               style: TextStyle(
-                color: getContrastingTextColor(backgroundColorFromProvider),
+                color: getContrastingTextColor(backgroundColorFromProvider)
+                    .withAlpha(200),
               ),
             ),
             const SizedBox(height: 20),
             TextFormField(
               autofocus: true,
               enabled: isEditMode ? true : false,
-              decoration:
-                  InputDecoration.collapsed(hintText: 'Type something...'),
+              decoration: InputDecoration.collapsed(
+                hintText: 'Type something...',
+                hintStyle: TextStyle(
+                  color: getContrastingTextColor(backgroundColorFromProvider)
+                      .withAlpha(150),
+                ),
+              ),
               maxLines: null,
               keyboardType: TextInputType.multiline,
               controller: contentController,
