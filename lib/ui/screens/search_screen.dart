@@ -139,12 +139,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
                           setState(() {});
                         },
-                        child: NoteCard(
-                          noteId: data.noteId,
-                          title: data.title,
-                          content: data.content,
-                          color: data.color,
-                          date: data.dateToString(),
+                        child: Hero(
+                          tag: data.noteId,
+                          child: NoteCard(
+                            noteId: data.noteId,
+                            title: data.title,
+                            content: data.content,
+                            color: data.color,
+                            date: data.dateToString(),
+                          ),
                         ),
                       );
                     },
