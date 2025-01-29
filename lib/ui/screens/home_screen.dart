@@ -166,29 +166,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           setState(() {});
         },
         borderRadius: BorderRadius.circular(72),
-        child: Container(
-          height: 70,
-          width: 70,
-          decoration: BoxDecoration(
-            color: Color(0xFF252525),
-            borderRadius: BorderRadius.circular(72),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x40000000),
-                spreadRadius: 0,
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-              BoxShadow(
-                color: Color(0x40000000),
-                spreadRadius: 0,
-                blurRadius: 10,
-                offset: Offset(-5, 0),
-              ),
-            ],
-          ),
-          child: Center(
-            child: FaIcon(FontAwesomeIcons.plus, size: 32),
+        child: Hero(
+          tag: 'newNote',
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: BoxDecoration(
+              color: Color(0xFF252525),
+              borderRadius: BorderRadius.circular(72),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x40000000),
+                  spreadRadius: 0,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+                BoxShadow(
+                  color: Color(0x40000000),
+                  spreadRadius: 0,
+                  blurRadius: 10,
+                  offset: Offset(-5, 0),
+                ),
+              ],
+            ),
+            child: Center(
+              child: FaIcon(FontAwesomeIcons.plus, size: 32),
+            ),
           ),
         ),
       ),
