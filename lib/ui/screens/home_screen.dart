@@ -59,8 +59,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     );
                   },
-                  icon: CircleAvatar(
-                    foregroundImage: NetworkImage(currentUser.photoURL ?? ''),
+                  icon: Hero(
+                    tag: 'profilePic',
+                    child: CircleAvatar(
+                      foregroundImage: NetworkImage(currentUser.photoURL ?? ''),
+                    ),
                   ),
                 );
               } else if (snapshot.hasError) {

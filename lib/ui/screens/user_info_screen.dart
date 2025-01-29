@@ -11,6 +11,8 @@ class UserInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 86,
@@ -33,37 +35,28 @@ class UserInfoScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FutureBuilder(
-                future: Future.value(FirebaseAuth.instance.currentUser),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final currentUser = snapshot.data!;
-                    return Column(
-                      children: [
-                        CircleAvatar(
-                          foregroundImage:
-                              NetworkImage(currentUser.photoURL ?? ''),
-                          radius: 48,
-                        ),
-                        Text(
-                          currentUser.displayName!,
-                          style: GoogleFonts.nunito(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          currentUser.email!,
-                          style: GoogleFonts.nunito(color: Colors.white),
-                        ),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    return const FaIcon(FontAwesomeIcons.xmark);
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
+              Column(
+                children: [
+                  Hero(
+                    tag: 'profilePic',
+                    child: CircleAvatar(
+                      foregroundImage:
+                          NetworkImage(currentUser!.photoURL ?? ''),
+                      radius: 48,
+                    ),
+                  ),
+                  Text(
+                    currentUser.displayName!,
+                    style: GoogleFonts.nunito(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    currentUser.email!,
+                    style: GoogleFonts.nunito(color: Colors.white),
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
               FilledButton.tonalIcon(
