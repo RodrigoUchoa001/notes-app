@@ -81,9 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         minimum: EdgeInsets.symmetric(horizontal: 20),
         child: NotesList(
           onNoteUpdated: () {
-            Future.delayed(const Duration(milliseconds: 300), () {
-              setState(() {});
-            });
+            setState(() {});
           },
         ),
       ),
