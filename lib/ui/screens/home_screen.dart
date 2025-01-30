@@ -130,7 +130,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       );
 
-                      setState(() {});
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        setState(() {});
+                      });
                     },
                     child: Hero(
                       tag: data.noteId,
@@ -166,7 +168,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           );
 
-          setState(() {});
+          Future.delayed(const Duration(milliseconds: 300), () {
+            setState(() {});
+          });
         },
         borderRadius: BorderRadius.circular(72),
         child: Hero(

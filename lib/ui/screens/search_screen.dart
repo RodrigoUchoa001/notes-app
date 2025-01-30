@@ -147,7 +147,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             ),
                           );
 
-                          setState(() {});
+                          Future.delayed(const Duration(milliseconds: 300), () {
+                            setState(() {});
+                          });
                         },
                         child: Hero(
                           tag: data.noteId,
