@@ -63,11 +63,11 @@ class UserInfoScreen extends StatelessWidget {
                 onPressed: () async {
                   await UserController.signOut();
 
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                  Navigator.of(context).pushReplacement(
+                  Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (context) => const LoginScreen(),
                     ),
+                    (_) => false,
                   );
                 },
                 icon: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
