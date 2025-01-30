@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/ui/screens/search_screen.dart';
@@ -89,6 +90,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onTap: () async {
           ref.read(noteBackgroundColorProvider.notifier).state =
               Color(0xFF252525);
+
+          ref.read(editModeProvider.notifier).state = true;
 
           // wait for the screen to come back from EditNoteScreen to HomeScreen,
           // then setState to reload the notes

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/controllers/note_controller.dart';
+import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/ui/widgets/home_screen/note_card.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
@@ -64,6 +65,8 @@ class _NotesListState extends ConsumerState<NotesList> {
                 onTap: () async {
                   ref.read(noteBackgroundColorProvider.notifier).state =
                       data.color;
+
+                  ref.read(editModeProvider.notifier).state = false;
 
                   await Navigator.of(context).push(
                     MaterialPageRoute(
