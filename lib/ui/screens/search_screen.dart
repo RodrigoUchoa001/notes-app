@@ -3,11 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/note_controller.dart';
-import 'package:notes_app/ui/providers/note_background_color_provider.dart';
-import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
-import 'package:notes_app/ui/widgets/home_screen/note_card.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:notes_app/ui/widgets/home_screen/notes_list.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -18,6 +15,7 @@ class SearchScreen extends ConsumerStatefulWidget {
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
   final searchController = TextEditingController();
+  late Future<List<NoteData>> _notesFuture;
 
   List<NoteData> filteredNotesList = [];
   List<NoteData> notesList = [];
@@ -31,14 +29,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   }
 
   Future<void> _fetchNotes() async {
-    final fetchedNotes = await NoteController().getNotes();
+    _notesFuture = NoteController().getNotes();
+    final fetchedNotes = await _notesFuture;
     setState(() {
       notesList = fetchedNotes;
-      filteredNotesList = fetchedNotes;
+      filteredNotesList = _filterNotes();
     });
   }
 
-  void _filterNotes() {
+  List<NoteData> _filterNotes() {
     List<NoteData> tempList = notesList;
 
     if (searchController.text.isNotEmpty) {
@@ -52,6 +51,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     setState(() {
       filteredNotesList = tempList;
     });
+
+    return filteredNotesList;
   }
 
   @override
@@ -75,6 +76,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
+          // shrinkWrap: true,
           children: [
             TextFormField(
               autofocus: true,
@@ -98,13 +100,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             ),
             const SizedBox(height: 16),
             FutureBuilder(
-              future: NoteController().getNotes(),
+              future: _notesFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Expanded(
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
                 } else if (snapshot.hasError) {
                   return Center(
@@ -115,58 +115,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     child: const Text("NENHUMA NOTA"),
                   );
                 }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: WaterfallFlow.builder(
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Número de colunas
-                      crossAxisSpacing: 12, // Espaçamento horizontal
-                      mainAxisSpacing: 12, // Espaçamento vertical
-                    ),
-                    itemCount: filteredNotesList.length,
-                    itemBuilder: (context, index) {
-                      final data = filteredNotesList[index];
-
-                      // wait for the screen to come back from EditNoteScreen to HomeScreen,
-                      // then setState to reload the notes
-                      return GestureDetector(
-                        onTap: () async {
-                          ref.read(noteBackgroundColorProvider.notifier).state =
-                              data.color;
-
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => EditNoteScreen(
-                                noteId: data.noteId,
-                                titleText: data.title,
-                                contentText: data.content,
-                                dateText: data.dateToString(),
-                              ),
-                            ),
-                          );
-
-                          Future.delayed(const Duration(milliseconds: 300), () {
-                            setState(() {});
-                          });
-                        },
-                        child: Hero(
-                          tag: data.noteId,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: NoteCard(
-                              noteId: data.noteId,
-                              title: data.title,
-                              content: data.content,
-                              color: data.color,
-                              date: data.dateToString(),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                return NotesList(
+                  notes: filteredNotesList,
+                  onNoteUpdated: () {
+                    _fetchNotes();
+                  },
                 );
               },
             ),
