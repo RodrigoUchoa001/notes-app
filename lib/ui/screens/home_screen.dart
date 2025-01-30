@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes_app/controllers/note_controller.dart';
 import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
@@ -19,6 +20,20 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late Future<List<NoteData>> _notesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotes();
+  }
+
+  void _loadNotes() {
+    setState(() {
+      _notesFuture = NoteController().getNotes();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,10 +95,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 20),
-        child: NotesList(
-          onNoteUpdated: () {
-            setState(() {});
+        child: RefreshIndicator(
+          onRefresh: () async {
+            _loadNotes();
           },
+          child: FutureBuilder(
+            future: _notesFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(
+                    child: Text("ERRO: ${snapshot.error.toString()}"));
+              } else if (snapshot.data!.isEmpty) {
+                return const Center(child: Text("NENHUMA NOTA"));
+              }
+
+              final notes = snapshot.data!;
+              return NotesList(
+                notes: notes,
+                onNoteUpdated: () {
+                  _loadNotes();
+                },
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: InkWell(
