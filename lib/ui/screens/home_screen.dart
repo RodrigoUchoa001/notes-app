@@ -136,12 +136,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                     child: Hero(
                       tag: data.noteId,
-                      child: NoteCard(
-                        noteId: data.noteId,
-                        title: data.title,
-                        content: data.content,
-                        color: data.color,
-                        date: data.dateToString(),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: NoteCard(
+                          noteId: data.noteId,
+                          title: data.title,
+                          content: data.content,
+                          color: data.color,
+                          date: data.dateToString(),
+                        ),
                       ),
                     ),
                   );
