@@ -78,7 +78,17 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           children: [
             TextFormField(
               autofocus: true,
-              decoration: InputDecoration(hintText: 'Type to search...'),
+              decoration: InputDecoration(
+                hintText: 'Type to search...',
+                prefixIcon: Hero(
+                  tag: 'search',
+                  child: Icon(
+                    FontAwesomeIcons.magnifyingGlass,
+                    color: Colors.white.withAlpha(100),
+                    size: 24,
+                  ),
+                ),
+              ),
               maxLines: null,
               controller: searchController,
               style: GoogleFonts.nunito(

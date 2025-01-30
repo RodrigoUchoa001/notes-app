@@ -35,15 +35,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         actions: [
-          AppBarButton(
-            function: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => SearchScreen(),
-                ),
-              );
-            },
-            icon: FontAwesomeIcons.magnifyingGlass,
+          Hero(
+            tag: 'search',
+            child: AppBarButton(
+              function: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => SearchScreen(),
+                  ),
+                );
+              },
+              icon: FontAwesomeIcons.magnifyingGlass,
+            ),
           ),
           const SizedBox(width: 12),
           FutureBuilder(
