@@ -24,11 +24,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void initState() {
     super.initState();
 
-    _fetchNotes();
+    _loadNotes();
     searchController.addListener(_filterNotes);
   }
 
-  Future<void> _fetchNotes() async {
+  Future<void> _loadNotes() async {
     _notesFuture = NoteController().getNotes();
     final fetchedNotes = await _notesFuture;
     setState(() {
@@ -118,7 +118,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 return NotesList(
                   notes: filteredNotesList,
                   onNoteUpdated: () {
-                    _fetchNotes();
+                    _loadNotes();
                   },
                 );
               },
