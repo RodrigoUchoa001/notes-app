@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/note_controller.dart';
 import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
+import 'package:notes_app/ui/providers/saving_state_provider.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/edit_note_screen/background_color_selector.dart';
 import 'package:notes_app/utils.dart';
@@ -45,6 +46,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
   Widget build(BuildContext context) {
     final isEditMode = ref.watch(editModeProvider);
     final backgroundColorFromProvider = ref.watch(noteBackgroundColorProvider);
+    final isSaving = ref.watch(savingStateProvider);
 
     // function executed after the widget is builded. Used to enable the
     // editMode if is a new note (the textfields are empty)
@@ -79,8 +81,14 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               : Container(),
           const SizedBox(width: 8),
           AppBarButton(
+            isLoading: isSaving,
             function: () async {
               ref.read(editModeProvider.notifier).state = !isEditMode;
+
+              // if clicked to save, savingState set to true
+              if (isEditMode) {
+                ref.read(savingStateProvider.notifier).state = true;
+              }
 
               // if finished editing, save to firestore database...
               if (!ref.read(editModeProvider.notifier).state) {
@@ -104,12 +112,14 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                       content: Text("Note saved!"),
                     ),
                   );
+                  ref.read(savingStateProvider.notifier).state = false;
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("A error occurred! ${e.toString()}"),
                     ),
                   );
+                  ref.read(savingStateProvider.notifier).state = false;
                 }
               }
             },
