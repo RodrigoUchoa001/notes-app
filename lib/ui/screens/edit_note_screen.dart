@@ -70,6 +70,13 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
           ),
           Expanded(child: Container()),
           AppBarButton(
+            function: () {
+              _deleteDialog(context);
+            },
+            icon: FontAwesomeIcons.trashCan,
+          ),
+          const SizedBox(width: 8),
+          AppBarButton(
             function: () async {
               ref.read(editModeProvider.notifier).state = !isEditMode;
 
@@ -175,6 +182,62 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
         ),
       ),
       bottomSheet: isEditMode ? BackgroundColorSelector() : const SizedBox(),
+    );
+  }
+
+  Future<void> _deleteDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(
+            'You sure you want to delete this note?',
+            style: GoogleFonts.nunito(
+              color: Colors.white,
+              fontSize: 24,
+            ),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () async {
+                try {
+                  await NoteController().deleteNoteById(newNoteId!);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Note deleted!"),
+                    ),
+                  );
+
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("A error occurred! ${e.toString()}"),
+                    ),
+                  );
+                }
+              },
+              child: Text(
+                'Yes',
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            FilledButton.tonal(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'No',
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
