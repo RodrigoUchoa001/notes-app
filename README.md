@@ -22,3 +22,6 @@ Inspired by the concept of "Amal", available at [A simple and lightweight note a
 
 ### Edit Note Screen empty:
 <img src="screenshots/edit_empty.png" alt="screenshot" width="200"/>
+
+### Using app:
+<img src="screenshots/app.gif" alt="screenshot" width="200"/>
