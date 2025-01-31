@@ -109,7 +109,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 return Center(
                     child: Text("ERRO: ${snapshot.error.toString()}"));
               } else if (snapshot.data!.isEmpty) {
-                return const Center(child: Text("NENHUMA NOTA"));
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(FontAwesomeIcons.xmark, size: 56),
+                      const SizedBox(height: 8),
+                      Text(
+                        "No notes to show!",
+                        style: GoogleFonts.nunito(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               }
 
               final notes = snapshot.data!;

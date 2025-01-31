@@ -110,7 +110,21 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   );
                 } else if (!snapshot.hasData || filteredNotesList.isEmpty) {
                   return Center(
-                    child: const Text("NENHUMA NOTA"),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(FontAwesomeIcons.xmark, size: 56),
+                        const SizedBox(height: 8),
+                        Text(
+                          "No notes to show!",
+                          style: GoogleFonts.nunito(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 }
                 return NotesList(
