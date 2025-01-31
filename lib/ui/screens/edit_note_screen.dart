@@ -83,6 +83,16 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
           AppBarButton(
             isLoading: isSaving,
             function: () async {
+              if (titleController.text.isEmpty &&
+                  contentController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Can't save a empty note!"),
+                  ),
+                );
+                return;
+              }
+
               ref.read(editModeProvider.notifier).state = !isEditMode;
 
               // if clicked to save, savingState set to true
