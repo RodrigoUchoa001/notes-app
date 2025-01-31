@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class AppBarButton extends StatelessWidget {
   final Function function;
   final IconData icon;
+  final bool? isLoading;
   const AppBarButton({
     super.key,
     required this.function,
     required this.icon,
+    this.isLoading,
   });
 
   @override
@@ -25,7 +27,12 @@ class AppBarButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(
-            child: Icon(icon, size: 24),
+            child: isLoading == true
+                ? SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(color: Colors.white))
+                : Icon(icon, size: 24),
           ),
         ),
       ),
