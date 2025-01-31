@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/note_controller.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/home_screen/notes_list.dart';
+import 'package:notes_app/ui/widgets/home_screen/shimmer_note_list.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -76,7 +77,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
-          // shrinkWrap: true,
           children: [
             TextFormField(
               autofocus: true,
@@ -103,9 +103,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               future: _notesFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return ShimmerNoteList();
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text("ERRO: ${snapshot.error.toString()}"),

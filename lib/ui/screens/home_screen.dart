@@ -11,6 +11,7 @@ import 'package:notes_app/ui/screens/search_screen.dart';
 import 'package:notes_app/ui/screens/user_info_screen.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/home_screen/notes_list.dart';
+import 'package:notes_app/ui/widgets/home_screen/shimmer_note_list.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -103,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             future: _notesFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const ShimmerNoteList();
               } else if (snapshot.hasError) {
                 return Center(
                     child: Text("ERRO: ${snapshot.error.toString()}"));
