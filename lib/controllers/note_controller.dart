@@ -75,6 +75,19 @@ class NoteController {
       );
     }).toList();
   }
+
+  Future<void> deleteNoteById(String noteId) async {
+    final user = UserController.user;
+    if (user == null) {
+      throw Exception('User not authenticated!');
+    }
+
+    final userId = user.uid;
+    final notesCollection =
+        _firestore.collection('Users').doc(userId).collection('Notes');
+
+    await notesCollection.doc(noteId).delete();
+  }
 }
 
 // functions to convert color to its channels, to save on firestore
