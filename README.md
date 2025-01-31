@@ -13,6 +13,12 @@ Inspired by the concept of "Amal", available at [A simple and lightweight note a
 - Write using voice.
 
 ## Screenshots
+
+### Home Screen:
 <img src="screenshots/home.png" alt="screenshot" width="200"/>
+
+### Edit Note Screen with content:
 <img src="screenshots/edit_full.png" alt="screenshot" width="200"/>
+
+### Edit Note Screen empty:
 <img src="screenshots/edit_empty.png" alt="screenshot" width="200"/>
