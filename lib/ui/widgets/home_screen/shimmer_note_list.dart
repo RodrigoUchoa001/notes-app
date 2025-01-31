@@ -22,7 +22,7 @@ class ShimmerNoteList extends StatelessWidget {
           baseColor: Colors.grey[300]!,
           highlightColor: Colors.grey[800]!,
           child: Container(
-            height: Random().nextInt(100) + 100, // size between 100 and 200
+            height: Random().nextInt(150) + 100, // size between 100 and 250
             decoration: BoxDecoration(
               color: Colors.white.withAlpha(150),
               borderRadius: BorderRadius.circular(8),
