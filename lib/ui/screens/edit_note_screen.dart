@@ -69,12 +69,14 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             icon: FontAwesomeIcons.chevronLeft,
           ),
           Expanded(child: Container()),
-          AppBarButton(
-            function: () {
-              _deleteDialog(context);
-            },
-            icon: FontAwesomeIcons.trashCan,
-          ),
+          newNoteId != null
+              ? AppBarButton(
+                  function: () {
+                    _deleteDialog(context);
+                  },
+                  icon: FontAwesomeIcons.trashCan,
+                )
+              : Container(),
           const SizedBox(width: 8),
           AppBarButton(
             function: () async {
@@ -91,6 +93,11 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                   );
 
                   newNoteId ??= docId;
+
+                  // To update the screen and show the delete button
+                  // By saving, the line above set the note id on "newNoteId",
+                  // turning it to not null, that makes the delete button appears
+                  setState(() {});
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
