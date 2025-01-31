@@ -16,6 +16,7 @@ class ShimmerNoteList extends StatelessWidget {
         mainAxisSpacing: 12,
       ),
       itemCount: 7,
+      shrinkWrap: true,
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
           baseColor: Colors.grey[300]!,

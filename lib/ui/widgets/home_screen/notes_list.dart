@@ -28,6 +28,7 @@ class _NotesListState extends ConsumerState<NotesList> {
         mainAxisSpacing: 12,
       ),
       itemCount: widget.notes.length,
+      shrinkWrap: true,
       itemBuilder: (context, index) {
         final data = widget.notes[index];
 
