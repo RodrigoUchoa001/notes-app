@@ -19,33 +19,34 @@ class BackgroundColorSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final backgroundColor = ref.watch(noteBackgroundColorProvider);
-
     return Container(
       color: Color(0xFF252525),
-      child: Row(
-        children: colors.map(
-          (color) {
-            return IconButton(
-              onPressed: () {
-                ref.read(noteBackgroundColorProvider.notifier).state = color;
-              },
-              icon: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                  border: Border.all(
-                    color: Colors.white,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: colors.map(
+            (color) {
+              return IconButton(
+                onPressed: () {
+                  ref.read(noteBackgroundColorProvider.notifier).state = color;
+                },
+                icon: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ).toList(),
+              );
+            },
+          ).toList(),
+        ),
       ),
     );
   }
