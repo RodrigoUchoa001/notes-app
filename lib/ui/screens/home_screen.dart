@@ -143,7 +143,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           );
 
           Future.delayed(const Duration(milliseconds: 300), () {
-            setState(() {});
+            setState(() {
+              _loadNotes();
+            });
           });
         },
         borderRadius: BorderRadius.circular(72),
