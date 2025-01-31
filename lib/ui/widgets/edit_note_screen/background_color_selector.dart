@@ -7,11 +7,14 @@ class BackgroundColorSelector extends ConsumerWidget {
 
   final colors = [
     Color(0xFF252525),
+    Colors.white,
     Colors.redAccent.shade100,
     Colors.lightBlueAccent.shade100,
     Colors.purple.shade300,
     Colors.pinkAccent.shade100,
     Colors.green.shade300,
+    Colors.indigo,
+    Colors.teal,
   ];
 
   @override
