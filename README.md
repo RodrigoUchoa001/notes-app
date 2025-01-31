@@ -10,7 +10,7 @@ Inspired by the concept of "Amal", available at [A simple and lightweight note a
 - Share notes with other accounts.
 - Able to format pieces of text on notes.
 - Save notes on local database.
-- Write using voice.
+- Write using speech-to-text.
 
 ## Screenshots
 
