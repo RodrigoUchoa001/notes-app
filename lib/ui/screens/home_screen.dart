@@ -21,7 +21,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  late Future<List<NoteData>> _notesFuture;
+  late Stream<List<NoteData>> _notesStream;
 
   @override
   void initState() {
@@ -30,9 +30,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _loadNotes() {
-    setState(() {
-      _notesFuture = NoteController().getNotes();
-    });
+    _notesStream = NoteController().getStreamNotes();
   }
 
   @override
@@ -100,8 +98,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onRefresh: () async {
             _loadNotes();
           },
-          child: FutureBuilder(
-            future: _notesFuture,
+          child: StreamBuilder(
+            stream: _notesStream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const ShimmerNoteList();
@@ -157,12 +155,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           );
-
-          Future.delayed(const Duration(milliseconds: 300), () {
-            setState(() {
-              _loadNotes();
-            });
-          });
         },
         borderRadius: BorderRadius.circular(72),
         child: Hero(
