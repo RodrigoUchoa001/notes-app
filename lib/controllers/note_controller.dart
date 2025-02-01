@@ -88,6 +88,31 @@ class NoteController {
     }).toList();
   }
 
+  Stream<List<NoteData>> getStreamNotes() {
+    final user = UserController.user;
+    if (user == null) {
+      throw Exception('User not authenticated!');
+    }
+
+    final userId = user.uid;
+    final notesCollection = _firestore.collection('Notes');
+
+    return notesCollection
+        .where('collaborators', arrayContains: userId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              final data = doc.data();
+              return NoteData(
+                noteId: doc.id,
+                title: data['title'],
+                content: data['content'],
+                date: DateTime(data['date']['year'], data['date']['month'],
+                    data['date']['day']),
+                color: mapToColor(data['backgroundColor']),
+              );
+            }).toList());
+  }
+
   Future<void> deleteNoteById(String noteId) async {
     final user = UserController.user;
     if (user == null) {
