@@ -19,8 +19,7 @@ class NoteController {
     }
 
     final userId = user.uid;
-    final notesCollection =
-        _firestore.collection('Users').doc(userId).collection('Notes');
+    final notesCollection = _firestore.collection('Notes');
 
     final actualDate = DateTime.now();
 
@@ -33,10 +32,22 @@ class NoteController {
         'year': actualDate.year,
       },
       'backgroundColor': colorToMap(backgroundColor),
+      'collaborators': [
+        userId,
+      ]
     };
 
     if (noteId != null) {
-      await notesCollection.doc(noteId).set(noteData);
+      await notesCollection.doc(noteId).update({
+        'title': title,
+        'content': content,
+        'date': {
+          'day': actualDate.day,
+          'month': actualDate.month,
+          'year': actualDate.year,
+        },
+        'backgroundColor': colorToMap(backgroundColor),
+      });
       return null;
     } else {
       final doc = await notesCollection.add(noteData);
