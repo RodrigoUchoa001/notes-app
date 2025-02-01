@@ -62,11 +62,12 @@ class NoteController {
     }
 
     final userId = user.uid;
-    final notesCollection =
-        _firestore.collection('Users').doc(userId).collection('Notes');
+    final notesCollection = _firestore.collection('Notes');
 
-    final querySnapshot =
-        await notesCollection.orderBy('date', descending: true).get();
+    final querySnapshot = await notesCollection
+        .where('collaborators', arrayContains: userId)
+        // .orderBy('date.year', descending: true)
+        .get();
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data();
