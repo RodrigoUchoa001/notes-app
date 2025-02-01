@@ -94,9 +94,7 @@ class NoteController {
       throw Exception('User not authenticated!');
     }
 
-    final userId = user.uid;
-    final notesCollection =
-        _firestore.collection('Users').doc(userId).collection('Notes');
+    final notesCollection = _firestore.collection('Notes');
 
     await notesCollection.doc(noteId).delete();
   }
