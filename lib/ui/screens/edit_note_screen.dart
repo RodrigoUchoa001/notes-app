@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/note_controller.dart';
@@ -71,14 +72,6 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             icon: FontAwesomeIcons.chevronLeft,
           ),
           Expanded(child: Container()),
-          newNoteId != null
-              ? AppBarButton(
-                  function: () {
-                    _deleteDialog(context);
-                  },
-                  icon: FontAwesomeIcons.trashCan,
-                )
-              : Container(),
           const SizedBox(width: 8),
           AppBarButton(
             isLoading: isSaving,
@@ -137,6 +130,8 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                 ? FontAwesomeIcons.floppyDisk
                 : FontAwesomeIcons.penToSquare,
           ),
+          newNoteId != null ? const SizedBox(width: 8) : Container(),
+          newNoteId != null ? createPopUpMenu(context) : Container(),
           const SizedBox(width: 24),
         ],
       ),
@@ -265,6 +260,129 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
           ],
         );
       },
+    );
+  }
+
+  Future<void> _collabDialog(BuildContext context) async {
+    final collabController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(
+            'Insert the e-mail of the person you want to add as collaborator:',
+            style: GoogleFonts.nunito(
+              color: Colors.white,
+              fontSize: 24,
+            ),
+          ),
+          actions: [
+            TextFormField(
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: 'Insert a e-mail...',
+              ),
+              maxLines: null,
+              controller: collabController,
+              style: GoogleFonts.nunito(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 8),
+            FilledButton(
+              onPressed: () async {
+                try {
+                  await NoteController().addCollaborator(
+                    newNoteId!,
+                    collabController.text,
+                  );
+
+                  Navigator.of(context).pop();
+                  Fluttertoast.showToast(
+                    msg: "${collabController.text} is now a collaborator!",
+                  );
+                } on Exception {
+                  Fluttertoast.showToast(
+                    msg: "User not found!",
+                  );
+                }
+              },
+              child: Text(
+                'Invite',
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget createPopUpMenu(BuildContext context) {
+    return Material(
+      color:
+          Color(0xFF3B3B3B), // set color here, so the inkwell animation appears
+      borderRadius: BorderRadius.circular(15),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: PopupMenuButton(
+            icon: Icon(FontAwesomeIcons.ellipsisVertical), // Ícone do botão
+            onSelected: (String value) {
+              switch (value) {
+                case 'delete':
+                  _deleteDialog(context);
+                  break;
+                case 'collab':
+                  _collabDialog(context);
+                default:
+              }
+            },
+            itemBuilder: (context) {
+              return [
+                if (newNoteId != null)
+                  PopupMenuItem(
+                    value: "delete",
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Icon(FontAwesomeIcons.trashCan, size: 20),
+                        ),
+                        const Text(
+                          'Delete Note',
+                        ),
+                      ],
+                    ),
+                  ),
+                PopupMenuItem(
+                  value: "collab",
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Icon(FontAwesomeIcons.userPlus, size: 20),
+                      ),
+                      const Text(
+                        'Add Collaborator',
+                      ),
+                    ],
+                  ),
+                )
+              ];
+            },
+          ),
+        ),
+      ),
     );
   }
 }
