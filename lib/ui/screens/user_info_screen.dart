@@ -47,6 +47,7 @@ class UserInfoScreen extends StatelessWidget {
                   ),
                   Text(
                     currentUser.displayName!,
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.nunito(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
