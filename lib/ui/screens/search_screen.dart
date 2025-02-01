@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,50 +17,36 @@ class SearchScreen extends ConsumerStatefulWidget {
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
   final searchController = TextEditingController();
-  late Future<List<NoteData>> _notesFuture;
-
-  List<NoteData> filteredNotesList = [];
-  List<NoteData> notesList = [];
 
   @override
   void initState() {
     super.initState();
-
-    _loadNotes();
-    searchController.addListener(_filterNotes);
-  }
-
-  Future<void> _loadNotes() async {
-    _notesFuture = NoteController().getNotes();
-    final fetchedNotes = await _notesFuture;
-    setState(() {
-      notesList = fetchedNotes;
-      filteredNotesList = _filterNotes();
+    searchController.addListener(() {
+      setState(() {}); // Trigger rebuild when search text changes
     });
-  }
-
-  List<NoteData> _filterNotes() {
-    List<NoteData> tempList = notesList;
-
-    if (searchController.text.isNotEmpty) {
-      tempList = tempList
-          .where((note) => note.title
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase()))
-          .toList();
-    }
-
-    setState(() {
-      filteredNotesList = tempList;
-    });
-
-    return filteredNotesList;
   }
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final user = snapshot.data!;
+          return _buildSearchContent(context, user);
+        } else {
+          return const Center(
+              child: CircularProgressIndicator()); // Or login prompt
+        }
+      },
+    );
+  }
+
+  Widget _buildSearchContent(BuildContext context, User user) {
+    final _notesStream = NoteController().getStreamNotes(user.uid);
+
     return Scaffold(
-      backgroundColor: Color(0xFF252525),
+      backgroundColor: const Color(0xFF252525),
       appBar: AppBar(
         backgroundColor: Color(0xFF252525),
         automaticallyImplyLeading: false,
@@ -75,8 +62,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         ],
       ),
       body: SafeArea(
-        minimum: EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
+        minimum: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          // Use Column instead of ListView
           children: [
             TextFormField(
               autofocus: true,
@@ -99,41 +87,71 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            FutureBuilder(
-              future: _notesFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return ShimmerNoteList();
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text("ERRO: ${snapshot.error.toString()}"),
-                  );
-                } else if (!snapshot.hasData || filteredNotesList.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(FontAwesomeIcons.xmark, size: 56),
-                        const SizedBox(height: 8),
-                        Text(
-                          "No notes to show!",
-                          style: GoogleFonts.nunito(
-                            color: Colors.white,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w600,
+            Expanded(
+              // Use Expanded to fill remaining space
+              child: StreamBuilder<List<NoteData>>(
+                key: ValueKey(user.uid), // Key based on user UID
+                stream: _notesStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const ShimmerNoteList();
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("ERRO: ${snapshot.error}"));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(FontAwesomeIcons.xmark, size: 56),
+                          const SizedBox(height: 8),
+                          Text(
+                            "No notes to show!",
+                            style: GoogleFonts.nunito(
+                              color: Colors.white,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  final notes = snapshot.data!;
+                  final filteredNotes = notes
+                      .where((note) => note.title
+                          .toLowerCase()
+                          .contains(searchController.text.toLowerCase()))
+                      .toList();
+
+                  if (filteredNotes.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(FontAwesomeIcons.xmark, size: 56),
+                          const SizedBox(height: 8),
+                          Text(
+                            "No notes to show!",
+                            style: GoogleFonts.nunito(
+                              color: Colors.white,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return NotesList(
+                    notes: filteredNotes,
+                    onNoteUpdated: () {
+                      // No need to reload all notes
+                    },
                   );
-                }
-                return NotesList(
-                  notes: filteredNotesList,
-                  onNoteUpdated: () {
-                    _loadNotes();
-                  },
-                );
-              },
+                },
+              ),
             ),
           ],
         ),

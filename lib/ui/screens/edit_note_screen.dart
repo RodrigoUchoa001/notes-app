@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,16 +46,26 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final user = snapshot.data!;
+          return _buildEditNoteContent(context, ref, user);
+        } else {
+          return const Center(
+              child: CircularProgressIndicator()); // Or login prompt
+        }
+      },
+    );
+  }
+
+  Widget _buildEditNoteContent(BuildContext context, WidgetRef ref, User user) {
     final isEditMode = ref.watch(editModeProvider);
     final backgroundColorFromProvider = ref.watch(noteBackgroundColorProvider);
     final isSaving = ref.watch(savingStateProvider);
 
-    // function executed after the widget is builded. Used to enable the
-    // editMode if is a new note (the textfields are empty)
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // set in start as not editMode (DONT WORK!!!!!!!!)
-      // ref.read(editModeProvider.notifier).state = false;
-
       // if (titleText.isEmpty && contentText.isEmpty) {
       //   ref.read(editModeProvider.notifier).state = true;
       // }
@@ -79,34 +90,31 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               if (titleController.text.isEmpty &&
                   contentController.text.isEmpty) {
                 Fluttertoast.showToast(
-                  msg: "Can't save a empty note!",
+                  msg: "Can't save an empty note!",
                 );
                 return;
               }
 
               ref.read(editModeProvider.notifier).state = !isEditMode;
 
-              // if clicked to save, savingState set to true
               if (isEditMode) {
                 ref.read(savingStateProvider.notifier).state = true;
               }
 
-              // if finished editing, save to firestore database...
               if (!ref.read(editModeProvider.notifier).state) {
                 try {
                   final docId = await NoteController().saveNote(
                     title: titleController.text,
                     content: contentController.text,
                     backgroundColor: backgroundColorFromProvider,
+                    userId: user.uid, // Pass user ID here
                     noteId: newNoteId,
                   );
 
                   newNoteId ??= docId;
 
                   // To update the screen and show the delete button
-                  // By saving, the line above set the note id on "newNoteId",
-                  // turning it to not null, that makes the delete button appears
-                  setState(() {});
+                  // setState(() {});
 
                   Fluttertoast.showToast(
                     msg: "Note saved!",
@@ -125,7 +133,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                 : FontAwesomeIcons.penToSquare,
           ),
           newNoteId != null ? const SizedBox(width: 8) : Container(),
-          newNoteId != null ? createPopUpMenu(context) : Container(),
+          newNoteId != null ? createPopUpMenu(context, newNoteId) : Container(),
           const SizedBox(width: 24),
         ],
       ),
@@ -134,14 +142,14 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
         child: Container(
           color: backgroundColorFromProvider,
           child: SafeArea(
-            minimum: EdgeInsets.symmetric(horizontal: 20),
+            minimum: const EdgeInsets.symmetric(horizontal: 20),
             child: Material(
               color: Colors.transparent,
               child: ListView(
                 children: [
                   const SizedBox(height: 16),
                   TextFormField(
-                    enabled: isEditMode ? true : false,
+                    enabled: isEditMode,
                     decoration: InputDecoration.collapsed(
                       hintText: 'Title',
                       hintStyle: TextStyle(
@@ -172,7 +180,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                   const SizedBox(height: 20),
                   TextFormField(
                     autofocus: true,
-                    enabled: isEditMode ? true : false,
+                    enabled: isEditMode,
                     decoration: InputDecoration.collapsed(
                       hintText: 'Type something...',
                       hintStyle: TextStyle(
@@ -201,7 +209,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Future<void> _deleteDialog(BuildContext context) async {
+  Future<void> _deleteDialog(BuildContext context, String noteId) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -217,7 +225,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             FilledButton(
               onPressed: () async {
                 try {
-                  await NoteController().deleteNoteById(newNoteId!);
+                  await NoteController().deleteNoteById(noteId);
 
                   Fluttertoast.showToast(
                     msg: "Note deleted",
@@ -253,7 +261,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Future<void> _collabDialog(BuildContext context) async {
+  Future<void> _collabDialog(BuildContext context, String noteId) async {
     final collabController = TextEditingController();
 
     return showDialog(
@@ -285,7 +293,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               onPressed: () async {
                 try {
                   await NoteController().addCollaborator(
-                    newNoteId!,
+                    noteId,
                     collabController.text,
                   );
 
@@ -312,10 +320,10 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Widget createPopUpMenu(BuildContext context) {
+  Widget createPopUpMenu(BuildContext context, String? newNoteId) {
     return Material(
-      color:
-          Color(0xFF3B3B3B), // set color here, so the inkwell animation appears
+      color: const Color(
+          0xFF3B3B3B), // set color here, so the inkwell animation appears
       borderRadius: BorderRadius.circular(15),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
@@ -326,14 +334,19 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: PopupMenuButton(
-            icon: Icon(FontAwesomeIcons.ellipsisVertical), // Ícone do botão
+            icon:
+                const Icon(FontAwesomeIcons.ellipsisVertical), // Ícone do botão
             onSelected: (String value) {
               switch (value) {
                 case 'delete':
-                  _deleteDialog(context);
+                  if (newNoteId != null) {
+                    _deleteDialog(context, newNoteId);
+                  }
                   break;
                 case 'collab':
-                  _collabDialog(context);
+                  if (newNoteId != null) {
+                    _collabDialog(context, newNoteId);
+                  }
                 default:
               }
             },
