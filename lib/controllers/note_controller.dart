@@ -11,14 +11,9 @@ class NoteController {
     required String title,
     required String content,
     required Color backgroundColor,
+    required String userId, // Add userId parameter
     String? noteId,
   }) async {
-    final user = UserController.user;
-    if (user == null) {
-      throw Exception('User not authenticated!');
-    }
-
-    final userId = user.uid;
     final notesCollection = _firestore.collection('Notes');
 
     final actualDate = DateTime.now();
@@ -33,7 +28,7 @@ class NoteController {
       },
       'backgroundColor': colorToMap(backgroundColor),
       'collaborators': [
-        userId,
+        userId, // Use the provided userId
       ]
     };
 
@@ -88,13 +83,7 @@ class NoteController {
     }).toList();
   }
 
-  Stream<List<NoteData>> getStreamNotes() {
-    final user = UserController.user;
-    if (user == null) {
-      throw Exception('User not authenticated!');
-    }
-
-    final userId = user.uid;
+  Stream<List<NoteData>> getStreamNotes(String userId) {
     final notesCollection = _firestore.collection('Notes');
 
     return notesCollection
