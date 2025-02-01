@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_app/utils.dart';
 
 class NoteCard extends ConsumerWidget {
@@ -8,13 +9,15 @@ class NoteCard extends ConsumerWidget {
   final String date;
   final String content;
   final String noteId;
+  final bool isOwner;
   const NoteCard(
       {super.key,
       required this.color,
       required this.title,
       required this.date,
       required this.content,
-      required this.noteId});
+      required this.noteId,
+      this.isOwner = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,6 +60,13 @@ class NoteCard extends ConsumerWidget {
                 color: getContrastingTextColor(color).withAlpha(200),
               ),
             ),
+            const SizedBox(height: 8),
+            if (isOwner)
+              Icon(
+                FontAwesomeIcons.userPlus,
+                size: 16,
+                color: getContrastingTextColor(color).withAlpha(650),
+              )
           ],
         ),
       ),

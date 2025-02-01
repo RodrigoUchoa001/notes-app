@@ -58,6 +58,7 @@ class _NotesListState extends ConsumerState<NotesList> {
             child: Material(
               color: Colors.transparent,
               child: NoteCard(
+                isOwner: data.isOwner,
                 noteId: data.noteId,
                 title: data.title,
                 content: data.content,

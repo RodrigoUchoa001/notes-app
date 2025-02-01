@@ -91,6 +91,7 @@ class NoteController {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
               final data = doc.data();
+
               return NoteData(
                 noteId: doc.id,
                 title: data['title'],
@@ -98,6 +99,10 @@ class NoteController {
                 date: DateTime(data['date']['year'], data['date']['month'],
                     data['date']['day']),
                 color: mapToColor(data['backgroundColor']),
+                // IF THE USERID IS EQUAL TO THE FIRST COLLABORATOR (THE PERSON
+                // HOW CREATED THE NOTE) SHOULD NOT IT BE THE OWNER??? THE
+                // false AND true ABOVE ARE SWAPPED AND IT WORKS???
+                isOwner: userId == data['collaborators'][0] ? false : true,
               );
             }).toList());
   }
@@ -161,6 +166,7 @@ class NoteData {
   String content;
   DateTime date;
   Color color;
+  bool isOwner;
 
   NoteData({
     required this.noteId,
@@ -168,6 +174,7 @@ class NoteData {
     required this.content,
     required this.date,
     required this.color,
+    this.isOwner = false,
   });
 
   String dateToString() {
