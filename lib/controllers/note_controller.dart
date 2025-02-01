@@ -123,6 +123,28 @@ class NoteController {
 
     await notesCollection.doc(noteId).delete();
   }
+
+  Future<void> addCollaborator(String noteId, String collaboratorEmail) async {
+    final firestore = FirebaseFirestore.instance;
+
+    final userQuery = await firestore
+        .collection('Users')
+        .where('email', isEqualTo: collaboratorEmail)
+        .limit(1)
+        .get();
+
+    if (userQuery.docs.isEmpty) {
+      throw Exception('User not found!');
+    }
+
+    final collaboratorId = userQuery.docs.first.id;
+
+    final noteRef = firestore.collection('Notes').doc(noteId);
+
+    await noteRef.update({
+      'collaborators': FieldValue.arrayUnion([collaboratorId])
+    });
+  }
 }
 
 // functions to convert color to its channels, to save on firestore
