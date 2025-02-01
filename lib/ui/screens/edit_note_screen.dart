@@ -78,10 +78,8 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             function: () async {
               if (titleController.text.isEmpty &&
                   contentController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Can't save a empty note!"),
-                  ),
+                Fluttertoast.showToast(
+                  msg: "Can't save a empty note!",
                 );
                 return;
               }
@@ -110,17 +108,13 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                   // turning it to not null, that makes the delete button appears
                   setState(() {});
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Note saved!"),
-                    ),
+                  Fluttertoast.showToast(
+                    msg: "Note saved!",
                   );
                   ref.read(savingStateProvider.notifier).state = false;
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("A error occurred! ${e.toString()}"),
-                    ),
+                  Fluttertoast.showToast(
+                    msg: "A error occurred! ${e.toString()}",
                   );
                   ref.read(savingStateProvider.notifier).state = false;
                 }
@@ -225,19 +219,15 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                 try {
                   await NoteController().deleteNoteById(newNoteId!);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Note deleted!"),
-                    ),
+                  Fluttertoast.showToast(
+                    msg: "Note deleted",
                   );
 
                   Navigator.pop(context);
                   Navigator.pop(context);
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("A error occurred! ${e.toString()}"),
-                    ),
+                  Fluttertoast.showToast(
+                    msg: "A error occurred! ${e.toString()}",
                   );
                 }
               },

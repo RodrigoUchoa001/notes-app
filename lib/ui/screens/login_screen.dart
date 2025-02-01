@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/user_controller.dart';
@@ -39,13 +40,11 @@ class LoginScreen extends ConsumerWidget {
                     ),
                   );
                   ref.read(isloggingInProvider.notifier).state = false;
-                } catch (error) {
+                } catch (e) {
                   ref.read(isloggingInProvider.notifier).state = false;
                   //
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("A error occurred! ${error.toString()}"),
-                    ),
+                  Fluttertoast.showToast(
+                    msg: "A error occurred! ${e.toString()}",
                   );
                   UserController.signOut();
                 }
