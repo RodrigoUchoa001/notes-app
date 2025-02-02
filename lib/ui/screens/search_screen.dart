@@ -97,7 +97,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   }
                   return NotesList(
                     notes: filteredNotes,
-                    onNoteUpdated: () {},
                   );
                 },
                 loading: () => const ShimmerNoteList(),

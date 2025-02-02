@@ -8,11 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 
 class NotesList extends ConsumerStatefulWidget {
-  final Function() onNoteUpdated;
   final List<NoteData> notes;
 
-  const NotesList(
-      {super.key, required this.notes, required this.onNoteUpdated});
+  const NotesList({super.key, required this.notes});
 
   @override
   ConsumerState<NotesList> createState() => _NotesListState();
@@ -48,10 +46,6 @@ class _NotesListState extends ConsumerState<NotesList> {
                 ),
               ),
             );
-
-            Future.delayed(const Duration(milliseconds: 350), () {
-              widget.onNoteUpdated();
-            });
           },
           child: Hero(
             tag: data.noteId,

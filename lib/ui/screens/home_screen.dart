@@ -104,7 +104,6 @@ class HomeScreen extends ConsumerWidget {
               } else {
                 return NotesList(
                   notes: notes,
-                  onNoteUpdated: () {},
                 );
               }
             },
