@@ -8,6 +8,7 @@ class NoteData {
   DateTime date;
   Color backgroundColor;
   bool isOwner;
+  List<dynamic>? collaborators;
 
   NoteData({
     this.noteId,
@@ -16,6 +17,7 @@ class NoteData {
     required this.date,
     this.backgroundColor = const Color(0xFF252525),
     this.isOwner = false,
+    this.collaborators,
   });
 
   Map<String, dynamic> toFirestore(String userId) {
