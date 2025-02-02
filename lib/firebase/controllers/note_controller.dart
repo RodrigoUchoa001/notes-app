@@ -40,39 +40,6 @@ class NoteController {
     }
   }
 
-  Future<List<NoteData>> getNotes() async {
-    final user = UserController.user;
-    if (user == null) {
-      throw Exception('User not authenticated!');
-    }
-
-    final userId = user.uid;
-    final notesCollection = _firestore.collection('Notes');
-
-    final querySnapshot = await notesCollection
-        .where('collaborators', arrayContains: userId)
-        // .orderBy('date.year', descending: true)
-        .get();
-
-    return querySnapshot.docs.map((doc) {
-      final data = doc.data();
-      final colorMap = data['backgroundColor'] as Map<String, dynamic>;
-      final backgroundColor = mapToColor(colorMap);
-
-      return NoteData(
-        noteId: doc.id,
-        title: data['title'],
-        content: data['content'],
-        date: DateTime(
-          data['date']['year'],
-          data['date']['month'],
-          data['date']['day'],
-        ),
-        color: backgroundColor,
-      );
-    }).toList();
-  }
-
   Stream<List<NoteData>> getStreamNotes(String userId) {
     final notesCollection = _firestore.collection('Notes');
 
