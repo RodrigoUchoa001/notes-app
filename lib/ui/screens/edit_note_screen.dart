@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/controllers/note_controller.dart';
 import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
+import 'package:notes_app/ui/providers/note_provider.dart';
 import 'package:notes_app/ui/providers/saving_state_provider.dart';
 import 'package:notes_app/ui/widgets/app_bar_button.dart';
 import 'package:notes_app/ui/widgets/edit_note_screen/background_color_selector.dart';
@@ -46,30 +46,11 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final user = snapshot.data!;
-          return _buildEditNoteContent(context, ref, user);
-        } else {
-          return const Center(
-              child: CircularProgressIndicator()); // Or login prompt
-        }
-      },
-    );
-  }
-
-  Widget _buildEditNoteContent(BuildContext context, WidgetRef ref, User user) {
     final isEditMode = ref.watch(editModeProvider);
     final backgroundColorFromProvider = ref.watch(noteBackgroundColorProvider);
     final isSaving = ref.watch(savingStateProvider);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // if (titleText.isEmpty && contentText.isEmpty) {
-      //   ref.read(editModeProvider.notifier).state = true;
-      // }
-    });
+    final user = ref.watch(userProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -103,23 +84,30 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
 
               if (!ref.read(editModeProvider.notifier).state) {
                 try {
-                  final docId = await NoteController().saveNote(
-                    title: titleController.text,
-                    content: contentController.text,
-                    backgroundColor: backgroundColorFromProvider,
-                    userId: user.uid, // Pass user ID here
-                    noteId: newNoteId,
+                  user.when(
+                    data: (user) async {
+                      final docId = await NoteController().saveNote(
+                        title: titleController.text,
+                        content: contentController.text,
+                        backgroundColor: backgroundColorFromProvider,
+                        userId: user!.uid, // Pass user ID here
+                        noteId: newNoteId,
+                      );
+
+                      newNoteId ??= docId;
+
+                      Fluttertoast.showToast(
+                        msg: "Note saved!",
+                      );
+                      ref.read(savingStateProvider.notifier).state = false;
+                    },
+                    loading: () {},
+                    error: (error, stackTrace) {
+                      Fluttertoast.showToast(
+                        msg: error.toString(),
+                      );
+                    },
                   );
-
-                  newNoteId ??= docId;
-
-                  // To update the screen and show the delete button
-                  // setState(() {});
-
-                  Fluttertoast.showToast(
-                    msg: "Note saved!",
-                  );
-                  ref.read(savingStateProvider.notifier).state = false;
                 } catch (e) {
                   Fluttertoast.showToast(
                     msg: "A error occurred! ${e.toString()}",
@@ -133,7 +121,9 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                 : FontAwesomeIcons.penToSquare,
           ),
           newNoteId != null ? const SizedBox(width: 8) : Container(),
-          newNoteId != null ? createPopUpMenu(context, newNoteId) : Container(),
+          newNoteId != null
+              ? _createPopUpMenu(context, newNoteId)
+              : Container(),
           const SizedBox(width: 24),
         ],
       ),
@@ -320,7 +310,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Widget createPopUpMenu(BuildContext context, String? newNoteId) {
+  Widget _createPopUpMenu(BuildContext context, String? newNoteId) {
     return Material(
       color: const Color(
           0xFF3B3B3B), // set color here, so the inkwell animation appears
