@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notes_app/controllers/user_controller.dart';
+import 'package:notes_app/firebase/controllers/user_controller.dart';
 import 'package:notes_app/ui/providers/is_logging_in_provider.dart';
 import 'package:notes_app/ui/screens/home_screen.dart';
 
