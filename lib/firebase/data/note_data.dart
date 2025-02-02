@@ -14,7 +14,7 @@ class NoteData {
     required this.title,
     this.content,
     required this.date,
-    required this.backgroundColor,
+    this.backgroundColor = const Color(0xFF252525),
     this.isOwner = false,
   });
 
