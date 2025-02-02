@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -43,6 +44,24 @@ class NoteData {
 
   String dateToString() {
     return DateFormat.yMMMd('en_US').format(date);
+  }
+
+  Future<List<dynamic>> getCollaboratorsNames() async {
+    final usersCollection = FirebaseFirestore.instance.collection('Users');
+    final userNames = [];
+
+    // Cria uma lista de documentos a serem buscados
+    final userDocs = await Future.wait(
+      collaborators!.map((userId) => usersCollection.doc(userId).get()),
+    );
+
+    // Popula a lista com os nomes dos usuários
+    for (final doc in userDocs) {
+      if (doc.exists) {
+        userNames.add(doc.get('name') as String);
+      }
+    }
+    return userNames;
   }
 }
 
