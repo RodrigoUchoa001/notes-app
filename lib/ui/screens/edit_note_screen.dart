@@ -16,12 +16,12 @@ class EditNoteScreen extends ConsumerStatefulWidget {
   const EditNoteScreen(
       {required this.titleText,
       required this.dateText,
-      required this.contentText,
+      this.contentText,
       this.noteId,
       super.key});
   final String titleText;
   final String dateText;
-  final String contentText;
+  final String? contentText;
   final String? noteId;
 
   @override
@@ -39,7 +39,8 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
   void initState() {
     super.initState();
     titleController.text = widget.titleText;
-    contentController.text = widget.contentText;
+    contentController.text =
+        widget.contentText == null ? "" : widget.contentText!;
 
     newNoteId = widget.noteId;
   }

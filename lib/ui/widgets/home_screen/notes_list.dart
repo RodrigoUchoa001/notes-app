@@ -32,7 +32,8 @@ class _NotesListState extends ConsumerState<NotesList> {
 
         return GestureDetector(
           onTap: () async {
-            ref.read(noteBackgroundColorProvider.notifier).state = data.color;
+            ref.read(noteBackgroundColorProvider.notifier).state =
+                data.backgroundColor;
 
             ref.read(editModeProvider.notifier).state = false;
 
@@ -48,15 +49,15 @@ class _NotesListState extends ConsumerState<NotesList> {
             );
           },
           child: Hero(
-            tag: data.noteId,
+            tag: data.noteId!,
             child: Material(
               color: Colors.transparent,
               child: NoteCard(
                 isOwner: data.isOwner,
-                noteId: data.noteId,
+                noteId: data.noteId!,
                 title: data.title,
                 content: data.content,
-                color: data.color,
+                color: data.backgroundColor,
                 date: data.dateToString(),
               ),
             ),

@@ -7,7 +7,7 @@ class NoteCard extends ConsumerWidget {
   final Color color;
   final String title;
   final String date;
-  final String content;
+  final String? content;
   final String noteId;
   final bool isOwner;
   const NoteCard(
@@ -15,7 +15,7 @@ class NoteCard extends ConsumerWidget {
       required this.color,
       required this.title,
       required this.date,
-      required this.content,
+      this.content,
       required this.noteId,
       this.isOwner = false});
 
