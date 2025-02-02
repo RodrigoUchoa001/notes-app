@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/firebase/controllers/note_controller.dart';
+import 'package:notes_app/firebase/data/note_data.dart';
 import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/providers/note_background_color_provider.dart';
 import 'package:notes_app/ui/providers/note_provider.dart';
@@ -13,16 +14,8 @@ import 'package:notes_app/ui/widgets/edit_note_screen/background_color_selector.
 import 'package:notes_app/utils.dart';
 
 class EditNoteScreen extends ConsumerStatefulWidget {
-  const EditNoteScreen(
-      {required this.titleText,
-      required this.dateText,
-      this.contentText,
-      this.noteId,
-      super.key});
-  final String titleText;
-  final String dateText;
-  final String? contentText;
-  final String? noteId;
+  const EditNoteScreen({required this.noteData, super.key});
+  final NoteData noteData;
 
   @override
   ConsumerState<EditNoteScreen> createState() => _EditNoteScreenState();
@@ -38,11 +31,11 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
   @override
   void initState() {
     super.initState();
-    titleController.text = widget.titleText;
+    titleController.text = widget.noteData.title;
     contentController.text =
-        widget.contentText == null ? "" : widget.contentText!;
+        widget.noteData.content == null ? "" : widget.noteData.content!;
 
-    newNoteId = widget.noteId;
+    newNoteId = widget.noteData.noteId;
   }
 
   @override
@@ -123,13 +116,13 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
           ),
           newNoteId != null ? const SizedBox(width: 8) : Container(),
           newNoteId != null
-              ? _createPopUpMenu(context, newNoteId)
+              ? _createPopUpMenu(context, widget.noteData)
               : Container(),
           const SizedBox(width: 24),
         ],
       ),
       body: Hero(
-        tag: widget.noteId ?? 'newNote',
+        tag: widget.noteData.noteId ?? 'newNote',
         child: Container(
           color: backgroundColorFromProvider,
           child: SafeArea(
@@ -161,7 +154,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    widget.dateText,
+                    widget.noteData.dateToString(),
                     style: TextStyle(
                       color:
                           getContrastingTextColor(backgroundColorFromProvider)
@@ -200,7 +193,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Future<void> _deleteDialog(BuildContext context, String noteId) async {
+  Future<void> _deleteDialog(BuildContext context, NoteData noteData) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -216,7 +209,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             FilledButton(
               onPressed: () async {
                 try {
-                  await NoteController().deleteNoteById(noteId);
+                  await NoteController().deleteNoteById(noteData.noteId!);
 
                   Fluttertoast.showToast(
                     msg: "Note deleted",
@@ -252,21 +245,27 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Future<void> _collabDialog(BuildContext context, String noteId) async {
+  Future<void> _collabDialog(BuildContext context, NoteData noteData) async {
     final collabController = TextEditingController();
 
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text(
-            'Insert the e-mail of the person you want to add as collaborator:',
+          title: Text(
+            'Manage Collaborators',
             style: GoogleFonts.nunito(
               color: Colors.white,
               fontSize: 24,
             ),
           ),
           actions: [
+            Text(
+              'Insert an e-mail above to invite to collaborate:',
+              style: GoogleFonts.nunito(
+                color: Colors.white,
+              ),
+            ),
             TextFormField(
               autofocus: true,
               decoration: InputDecoration(
@@ -284,7 +283,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               onPressed: () async {
                 try {
                   await NoteController().addCollaborator(
-                    noteId,
+                    noteData.noteId!,
                     collabController.text,
                   );
 
@@ -311,7 +310,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Widget _createPopUpMenu(BuildContext context, String? newNoteId) {
+  Widget _createPopUpMenu(BuildContext context, NoteData noteData) {
     return Material(
       color: const Color(
           0xFF3B3B3B), // set color here, so the inkwell animation appears
@@ -331,12 +330,12 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               switch (value) {
                 case 'delete':
                   if (newNoteId != null) {
-                    _deleteDialog(context, newNoteId);
+                    _deleteDialog(context, noteData);
                   }
                   break;
                 case 'collab':
                   if (newNoteId != null) {
-                    _collabDialog(context, newNoteId);
+                    _collabDialog(context, noteData);
                   }
                 default:
               }
@@ -358,20 +357,21 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                       ],
                     ),
                   ),
-                PopupMenuItem(
-                  value: "collab",
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: Icon(FontAwesomeIcons.userPlus, size: 20),
-                      ),
-                      const Text(
-                        'Add Collaborator',
-                      ),
-                    ],
-                  ),
-                )
+                if (noteData.isOwner)
+                  PopupMenuItem(
+                    value: "collab",
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Icon(FontAwesomeIcons.userPlus, size: 20),
+                        ),
+                        const Text(
+                          'Manage Collaborators',
+                        ),
+                      ],
+                    ),
+                  )
               ];
             },
           ),
