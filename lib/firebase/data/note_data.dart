@@ -2,23 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NoteData {
-  String noteId;
+  String? noteId;
   String title;
-  String content;
+  String? content;
   DateTime date;
   Color color;
   bool isOwner;
 
   NoteData({
-    required this.noteId,
+    this.noteId,
     required this.title,
-    required this.content,
+    this.content,
     required this.date,
     required this.color,
     this.isOwner = false,
   });
 
+  Map<String, dynamic> toFirestore(String userId) {
+    final data = <String, dynamic>{};
+
+    if (noteId != null) {
+      data['id'] = title;
+    }
+    data['title'] = title;
+    data['content'] = content;
+    data['date'] = {};
+    data['date']['year'] = date.year;
+    data['date']['month'] = date.month;
+    data['date']['day'] = date.day;
+    data['backgroundColor'] = colorToMap(color);
+    data['owner'] = userId;
+
+    List<String> collaboratorsList = [];
+    collaboratorsList.add(userId);
+    data['collaborators'] = collaboratorsList;
+    return data;
+  }
+
   String dateToString() {
     return DateFormat.yMMMd('en_US').format(date);
   }
+}
+
+// functions to convert color to its channels, to save on firestore
+Map<String, double> colorToMap(Color color) {
+  return {
+    'alpha': color.a,
+    'red': color.r,
+    'green': color.g,
+    'blue': color.b,
+  };
+}
+
+Color mapToColor(Map<String, dynamic> map) {
+  return Color.from(
+    alpha: map['alpha'],
+    red: map['red'],
+    green: map['green'],
+    blue: map['blue'],
+  );
 }
