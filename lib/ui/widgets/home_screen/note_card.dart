@@ -61,7 +61,7 @@ class NoteCard extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
-            if (isOwner)
+            if (!isOwner)
               Icon(
                 FontAwesomeIcons.userPlus,
                 size: 16,

@@ -56,10 +56,7 @@ class NoteController {
                 date: DateTime(data['date']['year'], data['date']['month'],
                     data['date']['day']),
                 backgroundColor: mapToColor(data['backgroundColor']),
-                // IF THE USERID IS EQUAL TO THE FIRST COLLABORATOR (THE PERSON
-                // HOW CREATED THE NOTE) SHOULD NOT IT BE THE OWNER??? THE
-                // false AND true ABOVE ARE SWAPPED AND IT WORKS???
-                isOwner: userId == data['collaborators'][0] ? false : true,
+                isOwner: userId == data['owner'] ? true : false,
               );
             }).toList());
   }
