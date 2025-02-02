@@ -56,6 +56,7 @@ class NoteController {
                 date: DateTime(data['date']['year'], data['date']['month'],
                     data['date']['day']),
                 backgroundColor: mapToColor(data['backgroundColor']),
+                collaborators: data['collaborators'],
                 isOwner: userId == data['owner'] ? true : false,
               );
             }).toList());
