@@ -11,41 +11,31 @@ class NoteController {
     required String title,
     required String content,
     required Color backgroundColor,
-    required String userId, // Add userId parameter
+    required String userId,
     String? noteId,
   }) async {
     final notesCollection = _firestore.collection('Notes');
 
     final actualDate = DateTime.now();
 
-    final noteData = {
-      'title': title,
-      'content': content,
-      'date': {
-        'day': actualDate.day,
-        'month': actualDate.month,
-        'year': actualDate.year,
-      },
-      'backgroundColor': colorToMap(backgroundColor),
-      'collaborators': [
-        userId, // Use the provided userId
-      ]
-    };
+    final noteData = NoteData(
+      title: title,
+      content: content,
+      date: DateTime(
+        actualDate.year,
+        actualDate.month,
+        actualDate.day,
+      ),
+      backgroundColor: backgroundColor,
+    );
 
     if (noteId != null) {
-      await notesCollection.doc(noteId).update({
-        'title': title,
-        'content': content,
-        'date': {
-          'day': actualDate.day,
-          'month': actualDate.month,
-          'year': actualDate.year,
-        },
-        'backgroundColor': colorToMap(backgroundColor),
-      });
+      await notesCollection.doc(noteId).update(
+            noteData.toFirestore(userId),
+          );
       return null;
     } else {
-      final doc = await notesCollection.add(noteData);
+      final doc = await notesCollection.add(noteData.toFirestore(userId));
       return doc.id;
     }
   }
@@ -98,7 +88,7 @@ class NoteController {
                 content: data['content'],
                 date: DateTime(data['date']['year'], data['date']['month'],
                     data['date']['day']),
-                color: mapToColor(data['backgroundColor']),
+                backgroundColor: mapToColor(data['backgroundColor']),
                 // IF THE USERID IS EQUAL TO THE FIRST COLLABORATOR (THE PERSON
                 // HOW CREATED THE NOTE) SHOULD NOT IT BE THE OWNER??? THE
                 // false AND true ABOVE ARE SWAPPED AND IT WORKS???
@@ -139,23 +129,4 @@ class NoteController {
       'collaborators': FieldValue.arrayUnion([collaboratorId])
     });
   }
-}
-
-// functions to convert color to its channels, to save on firestore
-Map<String, double> colorToMap(Color color) {
-  return {
-    'alpha': color.a,
-    'red': color.r,
-    'green': color.g,
-    'blue': color.b,
-  };
-}
-
-Color mapToColor(Map<String, dynamic> map) {
-  return Color.from(
-    alpha: map['alpha'],
-    red: map['red'],
-    green: map['green'],
-    blue: map['blue'],
-  );
 }
