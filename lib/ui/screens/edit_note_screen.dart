@@ -252,16 +252,53 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          actionsOverflowAlignment: OverflowBarAlignment.start,
           title: Text(
             'Manage Collaborators',
             style: GoogleFonts.nunito(
               color: Colors.white,
-              fontSize: 24,
             ),
           ),
           actions: [
             Text(
-              'Insert an e-mail above to invite to collaborate:',
+              'Collaborators List:',
+              style: GoogleFonts.nunito(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            FutureBuilder(
+              future: noteData.getCollaboratorsNames(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Text('ERROR');
+                } else if (snapshot.data!.isEmpty) {
+                  return const Text('EMPTY');
+                }
+                final data = snapshot.data;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: data!.map(
+                    (collabName) {
+                      return Text(
+                        "\u2022 $collabName",
+                        style: GoogleFonts.nunito(
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                  ).toList(),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Insert an e-mail below to invite it to collaborate:',
               style: GoogleFonts.nunito(
                 color: Colors.white,
               ),
