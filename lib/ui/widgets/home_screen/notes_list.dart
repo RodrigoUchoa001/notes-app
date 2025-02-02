@@ -40,10 +40,7 @@ class _NotesListState extends ConsumerState<NotesList> {
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => EditNoteScreen(
-                  noteId: data.noteId,
-                  titleText: data.title,
-                  contentText: data.content,
-                  dateText: data.dateToString(),
+                  noteData: data,
                 ),
               ),
             );
