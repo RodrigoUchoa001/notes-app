@@ -6,7 +6,7 @@ class NoteData {
   String title;
   String? content;
   DateTime date;
-  Color color;
+  Color backgroundColor;
   bool isOwner;
 
   NoteData({
@@ -14,7 +14,7 @@ class NoteData {
     required this.title,
     this.content,
     required this.date,
-    required this.color,
+    required this.backgroundColor,
     this.isOwner = false,
   });
 
@@ -30,7 +30,7 @@ class NoteData {
     data['date']['year'] = date.year;
     data['date']['month'] = date.month;
     data['date']['day'] = date.day;
-    data['backgroundColor'] = colorToMap(color);
+    data['backgroundColor'] = colorToMap(backgroundColor);
     data['owner'] = userId;
 
     List<String> collaboratorsList = [];
