@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/firebase/controllers/note_controller.dart';
+import 'package:notes_app/firebase/data/note_data.dart';
 import 'package:notes_app/ui/providers/edit_mode_provider.dart';
 import 'package:notes_app/ui/screens/edit_note_screen.dart';
 import 'package:notes_app/ui/widgets/home_screen/note_card.dart';

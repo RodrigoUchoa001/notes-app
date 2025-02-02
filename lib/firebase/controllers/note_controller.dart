@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:notes_app/firebase/controllers/user_controller.dart';
+import 'package:notes_app/firebase/data/note_data.dart';
 
 class NoteController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -158,26 +158,4 @@ Color mapToColor(Map<String, dynamic> map) {
     green: map['green'],
     blue: map['blue'],
   );
-}
-
-class NoteData {
-  String noteId;
-  String title;
-  String content;
-  DateTime date;
-  Color color;
-  bool isOwner;
-
-  NoteData({
-    required this.noteId,
-    required this.title,
-    required this.content,
-    required this.date,
-    required this.color,
-    this.isOwner = false,
-  });
-
-  String dateToString() {
-    return DateFormat.yMMMd('en_US').format(date);
-  }
 }

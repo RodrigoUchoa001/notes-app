@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/firebase/controllers/note_controller.dart';
+import 'package:notes_app/firebase/data/note_data.dart';
 
 final userProvider =
     StreamProvider<User?>((ref) => FirebaseAuth.instance.authStateChanges());
