@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:notes_app/controllers/user_controller.dart';
+import 'package:notes_app/firebase/controllers/user_controller.dart';
 
 class NoteController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
