@@ -319,14 +319,14 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
             FilledButton(
               onPressed: () async {
                 try {
-                  await NoteController().addCollaborator(
+                  await NoteController().inviteCollaborator(
                     noteData.noteId!,
                     collabController.text,
                   );
 
                   Navigator.of(context).pop();
                   Fluttertoast.showToast(
-                    msg: "${collabController.text} is now a collaborator!",
+                    msg: "${collabController.text} invited to collaborate.",
                   );
                 } on Exception {
                   Fluttertoast.showToast(
