@@ -36,6 +36,7 @@ class UserController {
         'name': user.displayName ?? 'No Name',
         'photoURL': user.photoURL ?? '',
         'createdAt': FieldValue.serverTimestamp(),
+        'collabInvites': [],
       });
     }
 
