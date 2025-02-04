@@ -16,16 +16,10 @@ class NoteController {
   }) async {
     final notesCollection = _firestore.collection('Notes');
 
-    final actualDate = DateTime.now();
-
     final noteData = NoteData(
       title: title,
       content: content,
-      date: DateTime(
-        actualDate.year,
-        actualDate.month,
-        actualDate.day,
-      ),
+      date: DateTime.now(),
       backgroundColor: backgroundColor,
     );
 
