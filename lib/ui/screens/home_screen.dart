@@ -24,6 +24,8 @@ class HomeScreen extends ConsumerWidget {
     final notesAsyncValue = ref.watch(notesStreamProvider);
     final collabInvites = ref.watch(invitesProvider);
 
+    final user = ref.watch(userProvider);
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 86,
@@ -106,7 +108,12 @@ class HomeScreen extends ConsumerWidget {
                             subtitle: FilledButton(
                               child: const Text('Check Invites'),
                               onPressed: () {
-                                _invitesDialog(context, invites);
+                                user.when(
+                                  data: (user) => _invitesDialog(
+                                      context, invites, user!.uid),
+                                  error: (error, _) => Text(error.toString()),
+                                  loading: () => CircularProgressIndicator(),
+                                );
                               },
                             ),
                           ),
@@ -206,7 +213,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Future<void> _invitesDialog(
-      BuildContext context, List<Invite> invites) async {
+      BuildContext context, List<Invite> invites, String userId) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -243,12 +250,21 @@ class HomeScreen extends ConsumerWidget {
                             children: [
                               FilledButton(
                                 child: const Text('Accept'),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await UserController().acceptInvite(
+                                      invite.noteId, userId, invite.invitedBy);
+
+                                  Navigator.pop(context);
+                                },
                               ),
                               const SizedBox(width: 8),
                               TextButton(
                                 child: const Text('Decline'),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await UserController().declineInvite(
+                                      invite.noteId, userId, invite.invitedBy);
+                                  Navigator.pop(context);
+                                },
                               ),
                               const SizedBox(width: 8),
                             ],
