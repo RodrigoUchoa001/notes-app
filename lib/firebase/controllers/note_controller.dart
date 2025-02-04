@@ -74,7 +74,7 @@ class NoteController {
   }
 
   Future<void> inviteCollaborator(
-      String noteId, String collaboratorEmail) async {
+      String noteId, String myUserId, String collaboratorEmail) async {
     final firestore = FirebaseFirestore.instance;
 
     final usersCollection = firestore.collection('Users');
@@ -94,7 +94,7 @@ class NoteController {
       'collabInvites': FieldValue.arrayUnion([
         {
           'noteId': noteId,
-          'invitedBy': collaboratorId,
+          'invitedBy': myUserId,
         }
       ])
     });
