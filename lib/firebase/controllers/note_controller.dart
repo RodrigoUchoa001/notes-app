@@ -69,9 +69,7 @@ class NoteController {
 
   Future<void> inviteCollaborator(
       String noteId, String myUserId, String collaboratorEmail) async {
-    final firestore = FirebaseFirestore.instance;
-
-    final usersCollection = firestore.collection('Users');
+    final usersCollection = _firestore.collection('Users');
 
     final userQuery = await usersCollection
         .where('email', isEqualTo: collaboratorEmail)
