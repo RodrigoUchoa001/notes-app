@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/firebase/controllers/user_controller.dart';
@@ -236,44 +237,67 @@ class HomeScreen extends ConsumerWidget {
                     fontSize: 16,
                   ),
                 ),
-                Card(
-                  child: Column(
-                    children: invites.map((invite) {
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(invite.invitedByName),
-                            subtitle: Text(invite.noteTitle),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              FilledButton(
-                                child: const Text('Accept'),
-                                onPressed: () async {
-                                  await UserController().acceptInvite(
-                                      invite.noteId, userId, invite.invitedBy);
+                const SizedBox(height: 8),
+                Column(
+                  children: invites.map((invite) {
+                    return Column(
+                      children: [
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Text(invite.noteTitle),
+                                  titleTextStyle: GoogleFonts.nunito(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                  subtitle: Text(invite.invitedByName),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    FilledButton(
+                                      child: const Text('Accept'),
+                                      onPressed: () async {
+                                        await UserController().acceptInvite(
+                                            invite.noteId,
+                                            userId,
+                                            invite.invitedBy);
 
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                              TextButton(
-                                child: const Text('Decline'),
-                                onPressed: () async {
-                                  await UserController().declineInvite(
-                                      invite.noteId, userId, invite.invitedBy);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                            ],
+                                        Fluttertoast.showToast(
+                                          msg: "Invited Accepted!",
+                                        );
+
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    const SizedBox(width: 8),
+                                    TextButton(
+                                      child: const Text('Decline'),
+                                      onPressed: () async {
+                                        await UserController().declineInvite(
+                                            invite.noteId,
+                                            userId,
+                                            invite.invitedBy);
+
+                                        Fluttertoast.showToast(
+                                          msg: "Invited Declined!",
+                                        );
+
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
                 ),
               ],
             ),
