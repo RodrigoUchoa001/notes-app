@@ -8,7 +8,8 @@ Inspired by the concept of "Amal", available at [A simple and lightweight note a
 - ✅ Log in with Google to save on Firebase.
 - ✅ Write notes and vizualize them in blocks.
 - Share notes with other accounts.
-    - ✅ Add another account to collaborate.
+    - ✅ Invite another account to collaborate.
+    - ✅ Accept or decline another account invites to collaborate.
     - The owner of the note be able to control the collaborators list.
 - Able to format pieces of text on notes.
 - Save notes on local database.
