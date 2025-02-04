@@ -90,6 +90,38 @@ class UserController {
       return invites;
     });
   }
+
+  Future<void> acceptInvite(
+      String noteId, String myUserId, String invitedBy) async {
+    final noteRef = FirebaseFirestore.instance.collection('Notes').doc(noteId);
+    final userRef =
+        FirebaseFirestore.instance.collection('Users').doc(myUserId);
+
+    // Adiciona o usuário logado à lista de colaboradores da nota
+    await noteRef.update({
+      'collaborators': FieldValue.arrayUnion([myUserId])
+    });
+
+    // Remove o convite após aceitar
+    await userRef.update({
+      'collabInvites': FieldValue.arrayRemove([
+        {'invitedBy': invitedBy, 'noteId': noteId}
+      ])
+    });
+  }
+
+  Future<void> declineInvite(
+      String noteId, String myUserId, String invitedBy) async {
+    final userRef =
+        FirebaseFirestore.instance.collection('Users').doc(myUserId);
+
+    // Remove o convite da lista collabInvites
+    await userRef.update({
+      'collabInvites': FieldValue.arrayRemove([
+        {'invitedBy': invitedBy, 'noteId': noteId}
+      ])
+    });
+  }
 }
 
 class Invite {
