@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -116,7 +117,12 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
           ),
           newNoteId != null ? const SizedBox(width: 8) : Container(),
           newNoteId != null
-              ? _createPopUpMenu(context, widget.noteData)
+              ? user.when(
+                  data: (user) =>
+                      _createPopUpMenu(context, widget.noteData, user),
+                  error: (error, stackTrace) => Text(error.toString()),
+                  loading: () => CircularProgressIndicator(),
+                )
               : Container(),
           const SizedBox(width: 24),
         ],
@@ -230,7 +236,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                 ),
               ),
             ),
-            FilledButton.tonal(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'No',
@@ -245,7 +251,8 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Future<void> _collabDialog(BuildContext context, NoteData noteData) async {
+  Future<void> _collabDialog(
+      BuildContext context, NoteData noteData, User? user) async {
     final collabController = TextEditingController();
 
     return showDialog(
@@ -320,9 +327,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
               onPressed: () async {
                 try {
                   await NoteController().inviteCollaborator(
-                    noteData.noteId!,
-                    collabController.text,
-                  );
+                      noteData.noteId!, user!.uid, collabController.text);
 
                   Navigator.of(context).pop();
                   Fluttertoast.showToast(
@@ -347,7 +352,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
     );
   }
 
-  Widget _createPopUpMenu(BuildContext context, NoteData noteData) {
+  Widget _createPopUpMenu(BuildContext context, NoteData noteData, User? user) {
     return Material(
       color: const Color(
           0xFF3B3B3B), // set color here, so the inkwell animation appears
@@ -372,7 +377,7 @@ class _EditNoteScreenState extends ConsumerState<EditNoteScreen> {
                   break;
                 case 'collab':
                   if (newNoteId != null) {
-                    _collabDialog(context, noteData);
+                    _collabDialog(context, noteData, user);
                   }
                 default:
               }
