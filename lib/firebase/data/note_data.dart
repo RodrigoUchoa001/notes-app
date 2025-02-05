@@ -47,22 +47,49 @@ class NoteData {
     return DateFormat.yMMMd('en_US').format(date);
   }
 
-  Future<List<dynamic>> getCollaboratorsNames() async {
+  Stream<List<String>> getCollaboratorsNames(String currentUserId) {
+    return FirebaseFirestore.instance
+        .collection('Users')
+        .where(FieldPath.documentId, whereIn: collaborators)
+        .snapshots()
+        .map((snapshot) {
+      List<String> collaboratorsList =
+          snapshot.docs.map((doc) => doc.get('name') as String).toList();
+
+      final currentUserDoc = snapshot.docs.firstWhere(
+        (doc) => doc.id == currentUserId,
+      );
+
+      final currentUserName = currentUserDoc.get('name') as String;
+      collaboratorsList.remove(currentUserName);
+      collaboratorsList.insert(0, currentUserName);
+
+      return collaboratorsList;
+    });
+  }
+
+  Future<void> removeCollaborator(String noteId, String collabName) async {
     final usersCollection = FirebaseFirestore.instance.collection('Users');
-    final userNames = [];
+    final notesCollection = FirebaseFirestore.instance.collection('Notes');
 
-    // Cria uma lista de documentos a serem buscados
-    final userDocs = await Future.wait(
-      collaborators!.map((userId) => usersCollection.doc(userId).get()),
-    );
+    final userQuery = await usersCollection
+        .where('name', isEqualTo: collabName)
+        .limit(1)
+        .get();
 
-    // Popula a lista com os nomes dos usuários
-    for (final doc in userDocs) {
-      if (doc.exists) {
-        userNames.add(doc.get('name') as String);
-      }
+    if (userQuery.docs.isEmpty) {
+      throw Exception('User not found!');
     }
-    return userNames;
+
+    final collaboratorId = userQuery.docs.first.id;
+
+    await notesCollection.doc(noteId).update({
+      'collaborators': FieldValue.arrayRemove([
+        collaboratorId,
+      ])
+    });
+
+    collaborators!.remove(collaboratorId);
   }
 }
 
