@@ -16,7 +16,7 @@ class NoteController {
   }) async {
     final notesCollection = _firestore.collection('Notes');
 
-    final noteData = NoteData(
+    NoteData noteData = NoteData(
       title: title,
       content: content,
       date: DateTime.now(),
@@ -29,6 +29,7 @@ class NoteController {
           );
       return null;
     } else {
+      noteData.collaborators = [userId];
       final doc = await notesCollection.add(noteData.toFirestore(userId));
       return doc.id;
     }

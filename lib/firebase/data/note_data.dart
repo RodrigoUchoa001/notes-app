@@ -26,7 +26,7 @@ class NoteData {
 
     if (noteId != null) {
       data['id'] = title;
-
+    } else {
       List<String> collaboratorsList = [];
       collaboratorsList.add(userId);
       data['collaborators'] = collaboratorsList;
