@@ -2,15 +2,15 @@
 
 A notes app with cloud sync using Firebase Firestore and developed with Flutter.
 
-Inspired by the concept of "Amal", available at [A simple and lightweight note app](https://dribbble.com/shots/11875872-A-simple-and-lightweight-note-app).
+Inspired by the concept of "Amal", available at [A simple and lightweight note app](https://dribbble.com/shots/11875872-A-simple-and-lightweight-note-app). Figma project available at [Notes App UI (Community)](https://www.figma.com/design/nZX8djGpHUhSCAQCNOINYq/Notes-App-UI-(Community)?node-id=0-1&p=f&t=L1Rj1BiHBUkWAY7O-0).
 
 ## Functionalities
 - ✅ Log in with Google to save on Firebase.
 - ✅ Write notes and vizualize them in blocks.
-- Share notes with other accounts.
+- ✅ Share notes with other accounts.
     - ✅ Invite another account to collaborate.
     - ✅ Accept or decline another account invites to collaborate.
-    - The owner of the note be able to control the collaborators list.
+    - ✅ The owner of the note be able to control the collaborators list.
 - Able to format pieces of text on notes.
 - Save notes on local database.
 - Write using speech-to-text.
