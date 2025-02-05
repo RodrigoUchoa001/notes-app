@@ -26,6 +26,10 @@ class NoteData {
 
     if (noteId != null) {
       data['id'] = title;
+
+      List<String> collaboratorsList = [];
+      collaboratorsList.add(userId);
+      data['collaborators'] = collaboratorsList;
     }
     data['title'] = title;
     data['content'] = content;
@@ -36,9 +40,6 @@ class NoteData {
     data['backgroundColor'] = colorToMap(backgroundColor);
     data['owner'] = userId;
 
-    List<String> collaboratorsList = [];
-    collaboratorsList.add(userId);
-    data['collaborators'] = collaboratorsList;
     return data;
   }
 
