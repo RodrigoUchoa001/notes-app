@@ -113,7 +113,7 @@ class HomeScreen extends ConsumerWidget {
                                   data: (user) => _invitesDialog(
                                       context, invites, user!.uid),
                                   error: (error, _) => Text(error.toString()),
-                                  loading: () => CircularProgressIndicator(),
+                                  loading: () => SizedBox(),
                                 );
                               },
                             ),
@@ -124,7 +124,7 @@ class HomeScreen extends ConsumerWidget {
                     ],
                   );
                 },
-                loading: () => CircularProgressIndicator(),
+                loading: () => SizedBox(),
                 error: (error, stackTrace) => Text("ERRO: $error"),
               ),
               notesAsyncValue.when(
