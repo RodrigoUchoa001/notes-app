@@ -18,6 +18,18 @@ Inspired by the concept of "Amal", available at [A simple and lightweight note a
     - The owner of the note is able to control the collaborators list.
 
 ## Screenshots
+
+### Home Screen
+<img src="screenshots/home.png" alt="screenshot" width="200"/>
+
+### Editing Note Screen Empty
+<img src="screenshots/edit_empty.png" alt="screenshot" width="200"/>
+
+### Editing Note Screen Full
+<img src="screenshots/edit_full.png" alt="screenshot" width="200"/>
+
+## App experience:
+
 ### Logging in with Google:
 <img src="screenshots/loginginwithgoogle.gif" alt="screenshot" width="200"/>
 
